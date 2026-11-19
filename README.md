@@ -1,7 +1,7 @@
 # Crises d'Entreprise — Jeu de cartes
 
-Jeu de 30 crises d'entreprise réelles + 8 cartes de rôles, avec épreuve de communication de crise.
-2 à 8 joueurs • 30 cartes + 8 rôles • ~20 minutes.
+Jeu de 30 crises d'entreprise réelles + 8 cartes de rôles + 5 cartes pièges, avec épreuve de communication de crise.
+2 à 8 joueurs • 30 cartes + 8 rôles + 5 pièges • ~20 minutes.
 
 ## Contenu du dépôt
 
@@ -9,12 +9,14 @@ Jeu de 30 crises d'entreprise réelles + 8 cartes de rôles, avec épreuve de co
 pdf/
   Crises_dEntreprise_30_cartes_A4.pdf         ← version imprimeur, 300 dpi (22 Mo, 10 pages)
   Crises_dEntreprise_30_cartes_A4_light.pdf   ← version allégée 200 dpi (7 Mo, 10 pages)
-  Crises_dEntreprise_8_roles_A4.pdf           ← les 8 cartes de rôle, 300 dpi (5 Mo, 3 pages)
+  Crises_dEntreprise_roles_et_pieges_A4.pdf   ← les 8 rôles (version simple) + 5 pièges, 300 dpi (6 Mo, 4 pages)
 cartes/
   card_01_perrier.png … card_30_azf.png       ← les 30 cartes en fichiers individuels (300 dpi)
   dos.png                                     ← dos unique du jeu
   roles/
-    role_01_pdg.png … role_08_ops.png         ← les 8 cartes de rôle (300 dpi)
+    role_01_pdg.png … role_08_ops.png         ← les 8 cartes de rôle — nom + illustration (300 dpi)
+  pieges/
+    piege_01_enquete.png … piege_05_covid.png ← les 5 cartes piège (300 dpi)
 ```
 
 ## Impression
@@ -22,7 +24,7 @@ cartes/
 1. **Papier** : A4 250-300 g/m² (papier photo brillant pour un rendu premium).
 2. **Impression** : recto-verso, **sans** mise à l'échelle (« Taille réelle / 100 % »), qualité maximale.
    - Deck crises : recto pages 1 à 5, verso pages 6 à 10 (retournement **bord long**).
-   - Rôles : recto pages 1 à 2, verso page 3 (dos commun).
+   - Rôles & pièges : recto pages 1 à 3, verso page 4 (dos commun).
 3. **Découpe** : chaque carte fait **63 × 88 mm** (format carte à jouer) avec **3 mm de fond perdu**.
    Coupez en suivant les traits de coupe gris imprimés dans les marges ; en cas de léger écart, le fond perdu évite les liserés blancs.
 4. Optionnel : couche de plastification mat ou brillant pour un toucher « carte premium ».
@@ -35,6 +37,18 @@ cartes/
 4. À la fin, chaque juge vote **OUI / NON** à voix haute (vote des journalistes compte double).
 5. **Majorité de OUI** : la perte de Réputation est **divisée par deux** (ex. −20 → −10).
 6. Première « entreprise » à franchir le seuil convenu (ex. −60 points perdus) est éliminée.
+
+### Cartes piège (5)
+
+À utiliser selon les règles maison : jouées à tout moment d'un tour.
+
+| Carte | Effet |
+|---|---|
+| **Complément d'enquête** | Enlève automatiquement 15 points à l'équipe adverse si l'entreprise gère parfaitement sa communication |
+| **Jensen Huang** | Interdit au PDG de l'entreprise de communiquer pendant 1 tour |
+| **Bernard Henri Lévy** | Permet d'annuler un tour si l'entreprise prend l'eau |
+| **Epstein Files** | Permet de censurer une réponse directement après qu'elle a été donnée : elle ne compte plus dans l'argumentaire |
+| **Covid** | Permet à l'arbitre d'annuler des dettes sans explication et de rajouter 15 points à une entreprise |
 
 ### Rôles et pouvoirs
 
