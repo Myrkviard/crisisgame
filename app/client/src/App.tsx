@@ -6,6 +6,7 @@ import MjDashboard from './screens/MjDashboard';
 import PlayerRoom from './screens/PlayerRoom';
 import Projection from './screens/Projection';
 import Gallery from './screens/Gallery';
+import SoloRoom from './screens/SoloRoom';
 
 interface Route {
   code: string | null;
@@ -49,6 +50,7 @@ export default function App() {
 
   if (auth && auth.code) {
     if (auth.kind === 'mj') return <MjDashboard auth={auth} onLogout={() => setAuthAndSave(null)} />;
+    if (auth.kind === 'solo') return <SoloRoom auth={auth} onLogout={() => setAuthAndSave(null)} />;
     return <PlayerRoom auth={auth} onLogout={() => setAuthAndSave(null)} />;
   }
 

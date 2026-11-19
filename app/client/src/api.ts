@@ -8,8 +8,9 @@ const AUTH_KEY = 'cg_auth';
 export interface Auth {
   code: string;
   token: string | null;
-  kind: 'mj' | 'player';
+  kind: 'mj' | 'player' | 'solo';
   name: string;
+  mjToken?: string;
 }
 
 export function loadAuth(): Auth | null {

@@ -273,3 +273,32 @@ button.team-b.selected { background: #4e2a10; border-color: var(--team-b); }
   .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
   .gallery-head h1 { font-size: 24px; }
 }
+
+/* Mode solo */
+.home-sep { color: var(--muted); font-size: 13px; letter-spacing: 2px; margin: 4px 0; }
+button.solo-btn {
+  background: linear-gradient(180deg, #1d2a3d, #12203a);
+  border-color: var(--gold); color: var(--gold); font-weight: 700; width: 100%;
+  font-size: 16px; padding: 12px;
+}
+button.solo-btn:hover { border-color: var(--text); }
+.solo-chip { color: var(--gold); border-color: var(--gold); }
+.solo-scorebar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.solo-scorebar h2 { margin: 0 0 4px; font-size: 15px; letter-spacing: 2px; }
+.solo-score { font-size: 44px; font-weight: 900; margin: 0; }
+.solo-score.pos { color: var(--gold); }
+.solo-score.neg { color: var(--accent); }
+.solo-meta { text-align: right; color: var(--muted); }
+.solo-meta p { margin: 2px 0; }
+.solo-meta b { color: var(--text); }
+.solo-links a { color: var(--gold); }
+.solo-reveal-text { font-size: 22px; font-weight: 800; letter-spacing: 2px; color: var(--gold); }
+.solo-eval-hint { color: var(--muted); margin: 14px 0 10px; }
+.solo-eval { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.solo-eval button { flex: 1; min-width: 220px; padding: 14px; font-size: 16px; }
+.solo-again { display: inline-block; text-decoration: none; color: #fff; border-radius: 10px; margin-top: 10px; max-width: 320px; }
+.crisis-company { color: var(--muted); letter-spacing: 1px; margin: 0 0 8px; }
+@media (max-width: 600px) {
+  .solo-scorebar { flex-direction: column; align-items: flex-start; }
+  .solo-meta { text-align: left; }
+}

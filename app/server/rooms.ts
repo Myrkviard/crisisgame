@@ -31,6 +31,9 @@ export interface Room {
   code: string;
   createdAt: number;
   status: Phase;
+  solo: boolean;
+  castRole: string | null;
+  lastRoleSpoken: string | null;
   mjToken: string;
   lastTeamRound: TeamId;
   deck: Deck;
@@ -74,12 +77,15 @@ export function logEntry(msg: string): LogEntry {
   return { t: Date.now(), msg };
 }
 
-export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: string): Room {
+export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: string, solo = false): Room {
   const code = genCode();
   const room: Room = {
     code,
     createdAt: Date.now(),
     status: 'LOBBY',
+    solo,
+    castRole: null,
+    lastRoleSpoken: null,
     mjToken: genToken(),
     lastTeamRound: 'A',
     deck,
@@ -99,7 +105,9 @@ export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: s
     lastSpeakerId: null,
     blockedCeo: { A: 0, B: 0 },
     cancelTurn: null,
-    log: [logEntry(`Partie créée par ${mjName} • paquet ${deckSource === 'github' ? 'GitHub' : 'de secours'} (v${deck.version})`)],
+    log: [logEntry(solo
+      ? `Mode solo créé par ${mjName} • paquet ${deckSource === 'github' ? 'GitHub' : 'de secours'} (v${deck.version})`
+      : `Partie créée par ${mjName} • paquet ${deckSource === 'github' ? 'GitHub' : 'de secours'} (v${deck.version})`)],
     playedCrisis: [],
   };
   rooms.set(code, room);

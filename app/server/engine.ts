@@ -41,14 +41,27 @@ export function full(room: Room): boolean {
 
 export function startGame(room: Room): void {
   if (room.status !== 'LOBBY') throw new GameError('La partie a déjà commencé');
-  if (!full(room)) throw new GameError(`Il faut 8 joueurs en équipes pour démarrer (${room.players.length}/8)`);
+  if (!room.solo && !full(room)) {
+    throw new GameError(`Il faut 8 joueurs en équipes pour démarrer (${room.players.length}/8)`);
+  }
 
   room.crisisDeck = shuffle(room.deck.crisis.map((c) => c.id));
+  room.round = 0;
+  for (const t of TEAMS) room.teamScores[t] = 0;
+  if (room.solo) {
+    room.roleDeck = [];
+    room.drawOrder = [];
+    room.drawIndex = 0;
+    room.hands = {};
+    room.status = 'PICK';
+    addLog(room, 'Mode solo • vous jouez les 8 rôles à tour de rôle');
+    beginRound(room);
+    saveRoom(room);
+    return;
+  }
   room.roleDeck = shuffle(room.deck.roles.map((r) => r.id));
   room.drawOrder = shuffle(room.players.map((p) => p.id));
   room.drawIndex = 0;
-  room.round = 0;
-  for (const t of TEAMS) room.teamScores[t] = 0;
   room.hands = distributeTraps(room.players, room.deck.traps);
   room.status = 'ROLES';
   addLog(room, 'La partie démarre • distribution des rôles tour par tour');
@@ -101,7 +114,13 @@ export function beginRound(room: Room): void {
   }
   room.crisisChoices = room.crisisDeck.slice(0, Math.min(CHOICES_COUNT, room.crisisDeck.length));
   room.currentCrisisId = null;
+  room.castRole = null;
   room.lastTeamRound = team;
+  if (room.solo) {
+    room.lastTeamRound = 'A';
+    addLog(room, `TOUR ${room.round} • à vous de tirer une carte crise`);
+    return;
+  }
   addLog(room, `TOUR ${room.round} • l'équipe ${team} choisit une carte crise`);
 }
 
@@ -122,7 +141,9 @@ export function pickCrisis(room: Room, player: Player, index: number): CrisisCar
   room.playedCrisis.push(crisisId);
   room.status = 'REVEAL';
   room.deadline = Date.now() + 2500;
-  addLog(room, `L'équipe ${player.team} révèle ${crisis.title} (${crisis.impact} pts)`);
+  addLog(room, room.solo
+    ? `Vous révélez ${crisis.title} (${crisis.impact} pts)`
+    : `L'équipe ${player.team} révèle ${crisis.title} (${crisis.impact} pts)`);
   saveRoom(room);
   return crisis;
 }
@@ -133,6 +154,16 @@ function crisisById(room: Room, id: string): CrisisCard | undefined {
 
 export function concertationDone(room: Room): void {
   if (room.status !== 'CONCERT') return;
+  if (room.solo) {
+    const role = pickSoloRole(room);
+    room.castRole = role.id;
+    room.lastRoleSpoken = role.id;
+    room.status = 'SPEAK';
+    room.deadline = null;
+    addLog(room, `Temps écoulé • c'est au tour du rôle ${role.title} de prendre la parole`);
+    saveRoom(room);
+    return;
+  }
   const speaker = chooseSpeaker(room);
   room.lastSpeakerId = speaker?.id ?? null;
   room.status = 'SPEAK';
@@ -158,6 +189,46 @@ export function chooseSpeaker(room: Room): Player | null {
   const chosen = pickOne(weighted);
   if (blockedCeo) room.blockedCeo[team] -= 1;
   return chosen;
+}
+
+function pickSoloRole(room: Room): { id: string; title: string } {
+  const pool = room.deck.roles.filter((r) => r.id !== room.lastRoleSpoken);
+  const weighted: typeof pool = [];
+  for (const r of pool) {
+    const weight = r.id === 'pdg' ? 3 : 1;
+    for (let i = 0; i < weight; i++) weighted.push(r);
+  }
+  return pickOne(weighted.length ? weighted : pool);
+}
+
+export function skipConcert(room: Room): void {
+  if (room.status !== 'CONCERT') throw new GameError('Pas de concertation en cours');
+  addLog(room, 'Concertation interrompue • tour de parole immédiat');
+  concertationDone(room);
+}
+
+export function selfEvaluate(room: Room, success: boolean): void {
+  if (room.status !== 'SPEAK') throw new GameError("Aucun tour de parole en cours");
+  const crisis = room.currentCrisisId ? crisisById(room, room.currentCrisisId) : undefined;
+  if (!crisis) throw new GameError('Aucune crise en cours');
+  if (success) {
+    const half = Math.abs(Math.round(crisis.impact / 2));
+    room.teamScores.A += half;
+    addLog(room, `Communication jugée convaincante • ${half} pts de perte récupérés`);
+  } else {
+    addLog(room, 'Communication jugée insuffisante • perte complète');
+  }
+  room.castRole = null;
+  room.status = 'PICK';
+  room.deadline = null;
+  room.pausedRemaining = null;
+  if (!room.crisisDeck.length) {
+    room.status = 'ENDED';
+    addLog(room, `Plus de cartes crise • partie terminée, score final : ${room.teamScores.A} points de Réputation`);
+  } else {
+    beginRound(room);
+  }
+  saveRoom(room);
 }
 
 export function playTrap(room: Room, player: Player, trapId: string): TrapCard {

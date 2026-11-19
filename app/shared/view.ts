@@ -12,6 +12,9 @@ export interface PublicPlayer {
 export interface PublicState {
   code: string;
   status: string;
+  solo: boolean;
+  soloRole: { id: string; title: string; image: string | null } | null;
+  crisisRemaining: number;
   deckSource: string;
   deckVersion: string;
   players: PublicPlayer[];

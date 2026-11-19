@@ -5,7 +5,7 @@ import type { PublicState, PrivateState, TeamId } from '../shared/view.js';
 import {
   addPointsToPlayerTeam, adjustScore, chooseSpeaker, drawRole, forceSpeaker,
   GameError, pauseTimer, pickCrisis, playTrap, requirePlayer, requireRoom,
-  restartTimer, resumeTimer, startGame, nextRound, beginRound,
+  restartTimer, resumeTimer, selfEvaluate, skipConcert, startGame, nextRound, beginRound,
 } from './engine.js';
 import { imageUrl, loadDeck } from './deck.js';
 import { imgProxy } from './imgproxy.js';
@@ -45,7 +45,7 @@ function publicState(room: Room): PublicState {
     })),
     teamScores: room.teamScores,
     round: room.round,
-    teamToPlay: room.round % 2 === 1 ? 'A' : 'B',
+    teamToPlay: room.solo ? 'A' : room.lastTeamRound,
     crisisChoicesCount: room.status === 'PICK' ? room.crisisChoices.length : 0,
     currentCrisis: crisis
       ? {
@@ -66,6 +66,13 @@ function publicState(room: Room): PublicState {
     speaker: speaker
       ? { name: speaker.name, roleTitle: speakerRole?.title ?? '—' }
       : null,
+    solo: room.solo,
+    soloRole: (() => {
+      if (!room.solo || room.status !== 'SPEAK') return null;
+      const role = room.deck.roles.find((r) => r.id === room.castRole);
+      return role ? { id: role.id, title: role.title, image: imageUrl(role.image) } : null;
+    })(),
+    crisisRemaining: room.crisisDeck.length - (room.currentCrisisId ? 1 : 0),
     canceledTeam: room.cancelTurn,
     blockedCeo: room.blockedCeo,
     log: room.log.slice(-40),
@@ -96,7 +103,7 @@ export function stateFor(room: Room, token: string | null): PublicState | Privat
         && room.drawOrder[room.drawIndex] === player.id,
       canPick:
         !!player && room.status === 'PICK' && player.team !== null
-        && player.team === (room.round % 2 === 1 ? 'A' : 'B'),
+        && player.team === (room.solo ? 'A' : room.lastTeamRound),
     },
   };
 }
@@ -111,8 +118,14 @@ function teamOf(req: Request): TeamId {
 
 api.post('/rooms', async (req, res) => {
   try {
-    const name = String(req.body?.name ?? 'Maître du Jeu').trim().slice(0, 32) || 'Maître du Jeu';
     const { deck, source } = await loadDeck();
+    const name = String(req.body?.name ?? 'Maître du Jeu').trim().slice(0, 32) || 'Maître du Jeu';
+    if (req.body?.mode === 'solo') {
+      const room = newRoom(deck, source, name, true);
+      const player = addPlayer(room, name, 'A');
+      res.json({ code: room.code, mjToken: room.mjToken, playerToken: player.token, solo: true, deckSource: source });
+      return;
+    }
     const room = newRoom(deck, source, name);
     res.json({ code: room.code, mjToken: room.mjToken, deckSource: source });
   } catch (err) {
@@ -123,6 +136,7 @@ api.post('/rooms', async (req, res) => {
 api.post('/rooms/:code/join', (req, res) => {
   try {
     const room = requireRoom(req.params.code);
+    if (room.solo) throw new GameError('Partie en mode solo : aucun joueur supplémentaire');
     if (room.status !== 'LOBBY') throw new GameError('La partie a déjà démarré');
     const name = String(req.body?.name ?? '').trim();
     if (!name) throw new GameError('Pseudo requis');
@@ -223,6 +237,32 @@ api.post('/rooms/:code/pick-crisis', (req, res) => {
     pickCrisis(room, player, Number(req.body?.index));
     notify(room);
     res.json(stateFor(room, req.body?.token));
+  } catch (err) {
+    fail(res, err);
+  }
+});
+
+api.post('/rooms/:code/skip-concert', (req, res) => {
+  try {
+    const room = requireRoom(req.params.code);
+    const player = requirePlayer(room, req.body?.token);
+    if (!room.solo) throw new GameError('Réservé au mode solo');
+    skipConcert(room);
+    notify(room);
+    res.json(stateFor(room, player.token));
+  } catch (err) {
+    fail(res, err);
+  }
+});
+
+api.post('/rooms/:code/evaluate', (req, res) => {
+  try {
+    const room = requireRoom(req.params.code);
+    const player = requirePlayer(room, req.body?.token);
+    if (!room.solo) throw new GameError('Réservé au mode solo');
+    selfEvaluate(room, req.body?.success === true);
+    notify(room);
+    res.json(stateFor(room, player.token));
   } catch (err) {
     fail(res, err);
   }
