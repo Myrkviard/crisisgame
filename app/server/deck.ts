@@ -5,13 +5,13 @@ import type { Deck, TrapCard } from '../shared/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const GITHUB_RAW_BASE =
+export const GITHUB_RAW_BASE =
   process.env.GITHUB_RAW_BASE ?? 'https://raw.githubusercontent.com/Myrkviard/crisisgame/main/';
 const DECK_URL = process.env.DECK_URL ?? new URL('deck/crisisgame.deck.json', GITHUB_RAW_BASE).href;
 const FALLBACK_PATH = path.join(__dirname, 'default-deck.json');
 
 export const imageUrl = (rel: string | undefined): string | null =>
-  rel ? new URL(rel, GITHUB_RAW_BASE).href : null;
+  rel ? `/api/img?path=${encodeURIComponent(rel)}` : null;
 
 export async function loadDeck(): Promise<{ deck: Deck; source: 'github' | 'fallback' }> {
   try {

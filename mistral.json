@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 2,
+  "kind": "app",
+  "name": "crisisgame",
+  "modules": [
+    {
+      "type": "app",
+      "name": "web",
+      "path": "app",
+      "routes": [
+        { "path": "/" }
+      ],
+      "port": 3000,
+      "serve": "server",
+      "runtime": "node",
+      "build": {
+        "context": ".",
+        "dockerfile": "app/Dockerfile",
+        "target": "runtime"
+      },
+      "dev": {
+        "startCommand": "npx tsx server/index.ts"
+      },
+      "deploy": {
+        "startCommand": "node dist-server/server/index.js"
+      }
+    }
+  ]
+}

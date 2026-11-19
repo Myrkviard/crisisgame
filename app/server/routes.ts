@@ -8,6 +8,7 @@ import {
   restartTimer, resumeTimer, startGame, nextRound, beginRound,
 } from './engine.js';
 import { imageUrl, loadDeck } from './deck.js';
+import { imgProxy } from './imgproxy.js';
 import { addClient, broadcast } from './sse.js';
 
 export const api = Router();
@@ -132,6 +133,12 @@ api.post('/rooms/:code/join', (req, res) => {
   } catch (err) {
     fail(res, err);
   }
+});
+
+api.get('/img', imgProxy);
+
+api.get('/health/live', (_req, res) => {
+  res.json({ ok: true, ts: Date.now() });
 });
 
 api.get('/rooms/:code/state', (req, res) => {
