@@ -6,7 +6,12 @@ import { api } from './routes.js';
 import { startTimers } from './timers.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CLIENT_DIST = path.join(__dirname, '..', 'client', 'dist');
+const CLIENT_CANDIDATES = [
+  path.join(__dirname, '..', '..', 'client', 'dist'),
+  path.join(__dirname, '..', 'client', 'dist'),
+  path.resolve(process.cwd(), 'client', 'dist'),
+];
+const CLIENT_DIST = CLIENT_CANDIDATES.find((p) => fs.existsSync(path.join(p, 'index.html')));
 const PORT = Number(process.env.PORT ?? 3000);
 
 const app = express();
@@ -15,7 +20,7 @@ app.disable('x-powered-by');
 app.use('/api', api);
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Route API introuvable' }));
 
-if (fs.existsSync(CLIENT_DIST)) {
+if (CLIENT_DIST) {
   app.use(express.static(CLIENT_DIST));
   app.get('*', (_req, res) => {
     res.sendFile(path.join(CLIENT_DIST, 'index.html'));
