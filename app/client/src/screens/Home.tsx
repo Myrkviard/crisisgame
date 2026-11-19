@@ -42,6 +42,7 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
         </button>
         {error && <p className="error">{error}</p>}
       </div>
+      <a className="gallery-link" href="/cartes">👀 Voir les cartes, les rôles et les pièges</a>
       <p className="footer-hint">10 places : 1 Maître du Jeu + 2 équipes de 4 joueurs.</p>
     </div>
   );

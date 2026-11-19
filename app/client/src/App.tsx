@@ -5,16 +5,19 @@ import Join from './screens/Join';
 import MjDashboard from './screens/MjDashboard';
 import PlayerRoom from './screens/PlayerRoom';
 import Projection from './screens/Projection';
+import Gallery from './screens/Gallery';
 
 interface Route {
   code: string | null;
   projection: boolean;
+  gallery?: boolean;
 }
 
 function parsePath(): Route {
+  if (window.location.pathname === '/cartes') return { code: null, projection: false, gallery: true };
   const m = window.location.pathname.match(/^\/partie\/([A-Za-z0-9]{3,10})(\/projection)?/);
-  if (!m) return { code: null, projection: false };
-  return { code: m[1].toUpperCase(), projection: m[2] === '/projection' };
+  if (!m) return { code: null, projection: false, gallery: false };
+  return { code: m[1].toUpperCase(), projection: m[2] === '/projection', gallery: false };
 }
 
 export default function App() {
@@ -40,7 +43,9 @@ export default function App() {
     setAuth(a);
   };
 
-  if (route.code && route.projection) return <Projection code={route.code} mode="public" />;
+  if (route.projection && route.code) return <Projection code={route.code} mode="public" />;
+
+  if (route.gallery) return <Gallery />;
 
   if (auth && auth.code) {
     if (auth.kind === 'mj') return <MjDashboard auth={auth} onLogout={() => setAuthAndSave(null)} />;

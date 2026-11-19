@@ -141,6 +141,24 @@ api.get('/health/live', (_req, res) => {
   res.json({ ok: true, ts: Date.now() });
 });
 
+api.get('/deck', async (_req, res) => {
+  try {
+    const { deck } = await loadDeck();
+    res.json({
+      version: deck.version,
+      crisis: deck.crisis.map((c) => ({
+        id: c.id, num: c.num, title: c.title, sub: c.sub, company: c.company,
+        sev: c.sev, sevLabel: c.sevLabel, impact: c.impact, description: c.description,
+        image: imageUrl(c.image),
+      })),
+      roles: deck.roles.map((r) => ({ id: r.id, title: r.title, image: imageUrl(r.image) })),
+      traps: deck.traps.map((t) => ({ id: t.id, title: t.title, rule: t.rule, image: imageUrl(t.image) })),
+    });
+  } catch (err) {
+    fail(res, err);
+  }
+});
+
 api.get('/rooms/:code/state', (req, res) => {
   try {
     const room = requireRoom(req.params.code);
