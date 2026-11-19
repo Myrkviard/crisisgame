@@ -6,7 +6,7 @@
   "scripts": {
     "dev:server": "tsx watch server/index.ts",
     "dev:client": "vite client",
-    "build": "tsc -p tsconfig.server.json && cp server/default-deck.json dist-server/server/ && vite client build",
+    "build": "tsc -p tsconfig.server.json && cp server/default-deck.json dist-server/server/ && vite build client",
     "start": "node dist-server/index.js",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p client/tsconfig.json --noEmit"
   },
