@@ -14,7 +14,7 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
       const res = await api<{ code: string; mjToken: string; deckSource: string }>('/rooms', { name });
       const url = `/partie/${res.code}`;
       window.history.pushState({}, '', url);
-      onCreated({ code: res.code, token: res.mjToken, kind: 'mj', name });
+      onCreated({ code: res.code, token: res.mjToken, kind: 'mj', name: name || 'Maître du Jeu' });
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -40,32 +40,62 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
   };
 
   return (
-    <div className="screen center">
-      <div className="logo">
-        <span className="logo-alert">⚠</span>
-        <h1>CRISES<br />D'ENTREPRISE</h1>
-        <p className="tagline">Communication • Réputation • Gestion de crise</p>
+    <div className="screen home">
+      <section className="hero">
+        <div className="hero-text">
+          <h1>⚠ CRISES<br />D'ENTREPRISE</h1>
+          <p className="tagline">Communication • Réputation • Gestion de crise</p>
+          <p className="hero-pitch">
+            30 crises réelles — du Dieselgate au CrowdStrike de 2024. Deux équipes
+            s'affrontent : tirage au sort des rôles, gestion sous le chrono de 2 minutes,
+            conférences de presse acharnées… et cartes pièges sournoises.
+          </p>
+        </div>
+        <img className="hero-card" src="/api/img?path=cartes%2Fdos.png" alt="Dos de carte Crises d'Entreprise" />
+      </section>
+
+      <div className="home-modes">
+        <section className="panel mode-card">
+          <h2>🍻 Soirée entre amis</h2>
+          <p className="mode-desc">1 maître du jeu + 2 équipes de 4 joueurs, sur téléphone par QR code.</p>
+          <input
+            placeholder="Votre pseudo"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={24}
+          />
+          <button className="primary" disabled={busy || busySolo} onClick={create}>
+            {busy ? 'Synchronisation du paquet…' : 'Créer la partie'}
+          </button>
+        </section>
+
+        <section className="panel mode-card">
+          <h2>🎮 Mode solo</h2>
+          <p className="mode-desc">Vous incarnez les 8 rôles, à votre rythme. Idéal pour s'entraîner.</p>
+          <button className="solo-btn" disabled={busy || busySolo} onClick={createSolo}>
+            {busySolo ? 'Préparation…' : 'Jouer tout seul'}
+          </button>
+        </section>
       </div>
-      <div className="panel">
-        <h2>Créer une partie</h2>
-        <p className="hint">Vous serez le Maître du Jeu. Les 8 joueurs rejoignent par QR code.</p>
-        <input
-          placeholder="Votre pseudo"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={24}
-        />
-        <button className="primary" disabled={busy || busySolo} onClick={create}>
-          {busy ? 'Synchronisation du paquet…' : 'Créer la partie (1 MJ + 8 joueurs)'}
-        </button>
-        <div className="home-sep">ou</div>
-        <button className="solo-btn" disabled={busy || busySolo} onClick={createSolo}>
-          {busySolo ? 'Préparation du mode solo…' : '🎮 Mode solo — je joue tous les rôles'}
-        </button>
-        {error && <p className="error">{error}</p>}
-      </div>
-      <a className="gallery-link" href="/cartes">👀 Voir les cartes, les rôles et les pièges</a>
-      <p className="footer-hint">10 places : 1 Maître du Jeu + 2 équipes de 4 joueurs.</p>
+
+      {error && <p className="error center">{error}</p>}
+
+      <section className="howto panel">
+        <h2>Comment jouer ?</h2>
+        <ol className="howto-steps">
+          <li><b>Créez la partie</b> et projetez le QR code à l'écran (ou le lien de projection).</li>
+          <li><b>Chacun pioche son rôle secret</b> : PDG, communicant, journalistes, RH…</li>
+          <li><b>À chaque tour</b>, une équipe tire une carte crise face cachée : révélation, chrono de 2 minutes, puis l'ordinateur désigne qui prend la parole.</li>
+          <li><b>Les adversaires jugent</b> la conférence de presse : convaincante, la perte est divisée par deux — sinon, points perdus. Les pièges ? Pendant les concertations.</li>
+        </ol>
+      </section>
+
+      <footer className="home-links">
+        <a className="home-link" href="/cartes">👀 Voir toutes les cartes (30 crises, 8 rôles, 5 pièges)</a>
+        <a className="home-link" href="/api/img?path=pdf%2FCrises_dEntreprise_30_cartes_A4.pdf">⬇️ PDF d'impression — les 30 cartes + dos (A4, fond perdu)</a>
+        <a className="home-link" href="/api/img?path=pdf%2FCrises_dEntreprise_roles_et_pieges_A4.pdf">⬇️ PDF d'impression — rôles et pièges (A4)</a>
+        <p className="footer-hint">Le paquet de cartes est chargé en direct depuis le dépôt GitHub.</p>
+      </footer>
     </div>
   );
 }

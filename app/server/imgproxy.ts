@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GITHUB_RAW_BASE } from './deck.js';
 
-const SAFE_PREFIXES = ['cartes/', 'deck/'];
+const SAFE_PREFIXES = ['cartes/', 'deck/', 'pdf/'];
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCAL_ROOT = process.env.CARDS_LOCAL_ROOT ?? path.resolve(__dirname, '..', '..', '..');
 
