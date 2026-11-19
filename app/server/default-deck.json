@@ -1,0 +1,500 @@
+{
+ "version": "2026-11-19T14:01:57Z",
+ "crisis": [
+  {
+   "id": "perrier",
+   "num": 1,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "PERRIER",
+   "sub": "CONTAMINATION",
+   "company": "Source Perrier • 1990",
+   "impact": -10,
+   "description": "Des traces de benzène, un produit cancérogène, sont détectées dans des bouteilles déjà expédiées en Amérique du Nord. La marque retire et détruit 160 millions de bouteilles dans le monde. Sa gestion, jugée lente et peu transparente, entame la confiance des consommateurs : Perrier mettra des années à reconstruire son image.",
+   "icon": "bottle",
+   "image": "cartes/card_01_perrier.png"
+  },
+  {
+   "id": "ryanair",
+   "num": 2,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "RYANAIR",
+   "sub": "ANNULATIONS MASSIVES",
+   "company": "Ryanair • 2017",
+   "impact": -10,
+   "description": "Une erreur de planification des congés pilotes annule plus de 20 000 vols, laissant près de 700 000 passagers au sol sur plusieurs mois. Indemnités réclamées en justice, colère des équipages, cacophonie médiatique : la « culture du surmenage » de la compagnie à bas coût est publiquement dénoncée dans toute l'Europe.",
+   "icon": "plane",
+   "image": "cartes/card_02_ryanair.png"
+  },
+  {
+   "id": "amazon",
+   "num": 3,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "AMAZON",
+   "sub": "MOUVEMENT SOCIAL",
+   "company": "Amazon • 2020",
+   "impact": -10,
+   "description": "Pendant la pandémie, des salariés dénoncent le manque de protection sanitaire dans les entrepôts et organisent grèves et débrayages. Les images de conditions de travail indignes font le tour du monde. La direction répond par des primes et du matériel, mais l'image du géant s'abîme durablement auprès du public et des syndicats.",
+   "icon": "people",
+   "image": "cartes/card_03_amazon.png"
+  },
+  {
+   "id": "united",
+   "num": 4,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "UNITED AIRLINES",
+   "sub": "PASSAGER EXPULSÉ",
+   "company": "United Airlines • 2017",
+   "impact": -10,
+   "description": "Pour libérer quatre sièges en surbooking, la compagnie fait expulser de force un passager : les vidéos du docteur Dao traîné dans l'allée deviennent virales dans le monde entier. La première réaction du PDG, le qualifiant de « perturbateur », attise l'indignation. En quelques heures, un milliard de dollars s'évapore en bourse.",
+   "icon": "plane_seat",
+   "image": "cartes/card_04_united.png"
+  },
+  {
+   "id": "tylenol",
+   "num": 5,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "TYLENOL",
+   "sub": "RETRAIT PRÉVENTIF",
+   "company": "Johnson & Johnson • 1982",
+   "impact": -10,
+   "description": "Sept personnes meurent à Chicago après avoir avalé du Tylenol volontairement empoisonné au cyanure. Johnson & Johnson rappelle aussitôt 31 millions de flacons, alerte les consommateurs en toute transparence et invente l'emballage inviolable. Devenu le manuel mondial de la gestion de crise, ce traitement honnête restaure la confiance et fait rebondir la marque.",
+   "icon": "pill",
+   "image": "cartes/card_05_tylenol.png"
+  },
+  {
+   "id": "carrefour",
+   "num": 6,
+   "sev": 1,
+   "sevLabel": "GRAVE",
+   "title": "CARREFOUR",
+   "sub": "RAPPEL PRODUIT",
+   "company": "Carrefour • 2019",
+   "impact": -10,
+   "description": "Des lots de saumon fumé vendus sous sa marque sont rappelés après la découverte de listéria, une bactérie dangereuse pour les personnes fragiles. Les rappels s'enchaînent et touchent des centaines de références. Les rayons se vident, les clients doutent des produits à marque distributeur : l'enseigne doit prouver sa rigueur sanitaire.",
+   "icon": "cart",
+   "image": "cartes/card_06_carrefour.png"
+  },
+  {
+   "id": "volkswagen",
+   "num": 7,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "VOLKSWAGEN",
+   "sub": "DIESELGATE",
+   "company": "Volkswagen • 2015",
+   "impact": -15,
+   "description": "Révélé en 2015 : des logiciels embarqués masquent la pollution réelle de 11 millions de véhicules lors des tests antipollution. Scandale planétaire, démission du PDG, chute des actions et plus de 30 milliards d'euros de sanctions et rappels. La confiance dans le diesel « propre » s'effondre, entraînant tout le secteur automobile dans la tourmente.",
+   "icon": "smog",
+   "image": "cartes/card_07_volkswagen.png"
+  },
+  {
+   "id": "samsung",
+   "num": 8,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "SAMSUNG",
+   "sub": "GALAXY NOTE 7",
+   "company": "Samsung • 2016",
+   "impact": -15,
+   "description": "Les batteries de son smartphone vedette prennent feu, y compris en plein vol. Après un premier rappel chaotique, des appareils remplacés s'enflamment à leur tour. Les compagnies aériennes interdisent le Note 7 à bord : Samsung arrête la production, condamne officiellement le produit et encaisse plus de 5 milliards de dollars de pertes.",
+   "icon": "phone_flame",
+   "image": "cartes/card_08_samsung.png"
+  },
+  {
+   "id": "sony",
+   "num": 9,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "SONY PICTURES",
+   "sub": "PIRATAGE",
+   "company": "Sony Pictures • 2014",
+   "impact": -15,
+   "description": "Un groupe de pirates se revendiquant de la Corée du Nord déverse sur internet mails internes, salaires, scénarios et films inédits du studio. Menaces à l'appui, la sortie du film « L'Interview qui tue » dégénère en crise diplomatique. Réseaux paralysés, secrets des affaires étalés au grand jour : le PDG finit par démissionner.",
+   "icon": "skull",
+   "image": "cartes/card_09_sony.png"
+  },
+  {
+   "id": "findus",
+   "num": 10,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "FINDUS",
+   "sub": "VIANDE DE CHEVAL",
+   "company": "Findus • 2013",
+   "impact": -15,
+   "description": "Les lasagnes « 100 % bœuf » de la marque contiennent en réalité 100 % de viande chevaline : une fraude organisée tout au long de la chaîne d'approvisionnement européenne. Les rayons Findus se vident d'un coup, les ventes s'écroulent de moitié et la confiance envers l'étiquetage agroalimentaire est durablement entamée.",
+   "icon": "steak",
+   "image": "cartes/card_10_findus.png"
+  },
+  {
+   "id": "tesla",
+   "num": 11,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "TESLA",
+   "sub": "POLÉMIQUE AUTOPILOT",
+   "company": "Tesla • 2016-2023",
+   "impact": -15,
+   "description": "Des accidents mortels impliquant l'assistant de conduite Autopilot s'accumulent, nourris par des vidéos de comportements dangereux. Les régulateurs reprochent un marketing trompeur : le nom laisse croire à une voiture autonome. En 2023, Tesla doit rappeler plus de 2 millions de véhicules pour corriger son logiciel. La promesse technologique devient un risque réputationnel.",
+   "icon": "wheel",
+   "image": "cartes/card_11_tesla.png"
+  },
+  {
+   "id": "uber",
+   "num": 12,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "UBER",
+   "sub": "PIRATAGE DISSIMULÉ",
+   "company": "Uber • 2016",
+   "impact": -15,
+   "description": "Des pirates volent les données personnelles de 57 millions de clients et chauffeurs. Plutôt que d'avertir, Uber paie 100 000 dollars pour acheter le silence des hackers et faire disparaître les données. Quand la dissimulation éclate un an plus tard, le chef de la sécurité est condamné pénalement et la confiance s'effondre.",
+   "icon": "shield_x",
+   "image": "cartes/card_12_uber.png"
+  },
+  {
+   "id": "sncf",
+   "num": 13,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "SNCF",
+   "sub": "PANNE NATIONALE",
+   "company": "SNCF • Juillet 2024",
+   "impact": -15,
+   "description": "À la veille de la cérémonie d'ouverture des Jeux de Paris 2024, des incendies coordonnés détruisent les câbles fibre de quatre lignes à grande vitesse. Près de 800 000 voyageurs sont perturbés et le trafic met des jours à se rétablir. En pleine vitrine mondiale, le pays mesure sa dépendance au ferroviaire.",
+   "icon": "train",
+   "image": "cartes/card_13_sncf.png"
+  },
+  {
+   "id": "boeing",
+   "num": 14,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "BOEING",
+   "sub": "PORTE ALASKA AIRLINES",
+   "company": "Boeing • Janvier 2024",
+   "impact": -15,
+   "description": "Sur le vol 1282 d'Alaska Airlines, un panneau de porte mal reboulonné se décroche en plein ciel, obligeant l'avion à atterrir en urgence. La FAA immobilise tous les 737 MAX 9 et plafonne la production. Lanceurs d'alerte, contrôles défaillants, sous-traitance douteuse : Boeing ébranle sa réputation de qualité et son PDG démissionne fin 2024.",
+   "icon": "door",
+   "image": "cartes/card_14_boeing.png"
+  },
+  {
+   "id": "tiktok",
+   "num": 15,
+   "sev": 2,
+   "sevLabel": "TRÈS GRAVE",
+   "title": "TIKTOK",
+   "sub": "CRISE DE RÉPUTATION",
+   "company": "TikTok • 2023",
+   "impact": -15,
+   "description": "Interrogé cinq heures durant devant le Congrès américain, le patron de TikTok doit répondre aux soupçons d'espionnage au profit de Pékin et aux inquiétudes sur la santé mentale des jeunes. Administrations et États fédérés interdisent l'application, Washington menace d'un bannissement national : l'appli la plus aimée des adolescents devient l'ennemie des gouvernements.",
+   "icon": "music_phone",
+   "image": "cartes/card_15_tiktok.png"
+  },
+  {
+   "id": "cambridge",
+   "num": 16,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "CAMBRIDGE ANALYTICA",
+   "sub": "SCANDALE FACEBOOK",
+   "company": "Facebook • 2018",
+   "impact": -20,
+   "description": "Une application parasite amasse les données de 87 millions d'utilisateurs Facebook pour le compte de Cambridge Analytica, qui micro-cible les électeurs américains et britanniques. La manipulation politique à grande échelle éclate au grand jour : campagne #DeleteFacebook, amende record de 5 milliards de dollars pour Facebook et dissolution des deux sociétés mises en cause.",
+   "icon": "eye_net",
+   "image": "cartes/card_16_cambridge.png"
+  },
+  {
+   "id": "equifax",
+   "num": 17,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "EQUIFAX",
+   "sub": "FUITE DE DONNÉES",
+   "company": "Equifax • 2017",
+   "impact": -20,
+   "description": "Une faille de sécurité oubliée pendant des mois permet le vol des données de 147 millions d'Américains : noms, cartes bancaires, numéros de sécurité sociale. L'annonce est retardée et des cadres revendent leurs actions avant la révélation. Résultat : 700 millions de dollars de sanctions et un cas d'école de gestion ratée de bout en bout.",
+   "icon": "padlock_broken",
+   "image": "cartes/card_17_equifax.png"
+  },
+  {
+   "id": "credit",
+   "num": 18,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "CREDIT SUISSE",
+   "sub": "PERTE DE CONFIANCE",
+   "company": "Credit Suisse • 2021-2023",
+   "impact": -20,
+   "description": "Après 166 ans de prestige, la banque helvétique enchaîne les revers : 5,5 milliards de dollars perdus avec Archegos, effondrement des fonds Greensill, espionnage de dirigeants, condamnations pénales. En mars 2023, une panique bancaire asphyxie ses dépôts : UBS rachète son rival au bord du gouffre, la plus lourde absorption bancaire européenne depuis 2008.",
+   "icon": "bank_crack",
+   "image": "cartes/card_18_credit.png"
+  },
+  {
+   "id": "yahoo",
+   "num": 19,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "YAHOO",
+   "sub": "PIRATAGE MASSIF",
+   "company": "Yahoo • 2013-2017",
+   "impact": -20,
+   "description": "Tous les comptes de Yahoo, soit 3 milliards, ont été compromis dès 2013 : mots de passe, mails, identifiants. La vérité n'émerge que trois ans plus tard, en plein rachat par Verizon, qui arrache 350 millions de dollars de remise. Le pionnier d'internet devient le symbole mondial du piratage négligé et de la transparence absente.",
+   "icon": "at",
+   "image": "cartes/card_19_yahoo.png"
+  },
+  {
+   "id": "colonial",
+   "num": 20,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "COLONIAL PIPELINE",
+   "sub": "CYBERATTAQUE",
+   "company": "Colonial Pipeline • 2021",
+   "impact": -20,
+   "description": "Un rançongiciel du groupe DarkSide paralyse pendant six jours le plus grand pipeline de carburant des États-Unis, qui alimente la côte Est. Stations-service vidées, panique d'achat, transports perturbés : l'entreprise finit par payer 4,4 millions de dollars de rançon. La cybersécurité des infrastructures critiques devient un enjeu présidentiel.",
+   "icon": "valve",
+   "image": "cartes/card_20_colonial.png"
+  },
+  {
+   "id": "lactalis",
+   "num": 21,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "LACTALIS",
+   "sub": "LAIT CONTAMINÉ",
+   "company": "Lactalis • 2017",
+   "impact": -20,
+   "description": "Des boîtes de lait infantile contaminées à la salmonelle quittent l'usine de Craon malgré des signaux d'alerte. Des nourrissons sont hospitalisés ; le rappel atteint 12 millions de boîtes dans 83 pays. Poursuites judiciaires, soupçons de dissimulation : le numéro un mondial du lait doit reconquérir la confiance des parents du monde entier.",
+   "icon": "milk",
+   "image": "cartes/card_21_lactalis.png"
+  },
+  {
+   "id": "wirecard",
+   "num": 22,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "WIRECARD",
+   "sub": "FRAUDE COMPTABLE",
+   "company": "Wirecard • 2020",
+   "impact": -20,
+   "description": "Les 1,9 milliard d'euros que le champion allemand des paiements prétendait déposer en Asie n'ont jamais existé. En quelques jours, 24 milliards de valorisation s'évaporent, le PDG est arrêté, le groupe sombre dans la faillite. Des faux relevés bancaires ont berné auditeurs et autorités pendant des années : l'une des plus grandes fraudes comptables d'Europe.",
+   "icon": "scale_broken",
+   "image": "cartes/card_22_wirecard.png"
+  },
+  {
+   "id": "casino",
+   "num": 23,
+   "sev": 3,
+   "sevLabel": "CRITIQUE",
+   "title": "CASINO",
+   "sub": "CRISE FINANCIÈRE",
+   "company": "Groupe Casino • 2023-2024",
+   "impact": -20,
+   "description": "Paralysée sous plus de 6 milliards d'euros de dettes, la distribution française doit se défaire de ses hypermarchés et supermarchés, rachetés par ses concurrents Intermarché, Auchan et Carrefour. Des milliers d'emplois sont sacrifiés. Pris en main par le trio Kretinsky, le groupe quitte la Bourse en 2024 après une décennie de descente aux enfers.",
+   "icon": "coins_down",
+   "image": "cartes/card_23_casino.png"
+  },
+  {
+   "id": "bp",
+   "num": 24,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "DEEPWATER HORIZON",
+   "sub": "MARÉE NOIRE",
+   "company": "BP • 2010",
+   "impact": -30,
+   "description": "Le 20 avril 2010, l'explosion de la plateforme Deepwater Horizon tue 11 ouvriers et libère 4,9 millions de barils de brut dans le golfe du Mexique pendant 87 jours. Pire marée noire de l'histoire américaine : littoraux dévastés, moratoire sur les forages, plus de 65 milliards de dollars de coûts. L'image de BP ne s'en remettra jamais tout à fait.",
+   "icon": "rig_flame",
+   "image": "cartes/card_24_bp.png"
+  },
+  {
+   "id": "enron",
+   "num": 25,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "ENRON",
+   "sub": "FRAUDE GÉANTE",
+   "company": "Enron • 2001",
+   "impact": -30,
+   "description": "Vendue comme l'entreprise la plus innovante d'Amérique, Enron s'effondre avec 63 milliards de dollars d'actifs, victime d'une comptabilité créative et de filiales fantômes. Retraites effacées, dizaines de condamnations, l'auditeur Arthur Andersen disparaît avec elle. Washington répond par la loi Sarbanes-Oxley. La chute de décembre 2001 reste la référence des scandales financiers.",
+   "icon": "columns_broken",
+   "image": "cartes/card_25_enron.png"
+  },
+  {
+   "id": "lehman",
+   "num": 26,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "LEHMAN BROTHERS",
+   "sub": "FAILLITE",
+   "company": "Lehman Brothers • 2008",
+   "impact": -30,
+   "description": "Le 15 septembre 2008, la légendaire banque d'affaires se déclare en faillite avec 619 milliards de dollars de dette : la plus grosse banqueroute de l'histoire américaine. Bourses en chute libre, crédit gelé, millions d'emplois détruits : le monde bascule dans la pire crise financière depuis 1929. Lehman devient le symbole de la démesure.",
+   "icon": "chart_down",
+   "image": "cartes/card_26_lehman.png"
+  },
+  {
+   "id": "ftx",
+   "num": 27,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "FTX",
+   "sub": "EFFONDREMENT",
+   "company": "FTX • 2022",
+   "impact": -30,
+   "description": "La bourse de cryptomonnaies vantée par les plus grandes stars s'effondre en dix jours : 8 milliards de dollars d'avoirs clients ont été détournés vers le fonds sœur Alameda. Retraits massifs, bilan truqué, faillite. Les clients perdent leurs économies, tout le secteur crypto est aspiré et le fondateur Sam Bankman-Fried écope de 25 ans de prison.",
+   "icon": "coin_crack",
+   "image": "cartes/card_27_ftx.png"
+  },
+  {
+   "id": "crowdstrike",
+   "num": 28,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "CROWDSTRIKE",
+   "sub": "PANNE MONDIALE 2024",
+   "company": "CrowdStrike • 19 juillet 2024",
+   "impact": -30,
+   "description": "Une simple mise à jour défectueuse d'un logiciel de sécurité plante 8,5 millions d'ordinateurs Windows dans le monde. Aéroports à l'arrêt, hôpitaux déprogrammés, banques et télévisions bloquées : la plus grande panne informatique de l'histoire, près de 5,4 milliards de dollars de pertes. Un seul fournisseur devient un point de défaillance planétaire.",
+   "icon": "globe_glitch",
+   "image": "cartes/card_28_crowdstrike.png"
+  },
+  {
+   "id": "exxon",
+   "num": 29,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "EXXON VALDEZ",
+   "sub": "MARÉE NOIRE",
+   "company": "Exxon • 1989",
+   "impact": -30,
+   "description": "Le 24 mars 1989, le pétrolier Exxon Valdez s'échoue sur un récif en Alaska, libérant 41 millions de litres de brut. Près de 2 000 km de côtes souillées, 250 000 oiseaux tués, une décennie de nettoyage à 2 milliards de dollars. Sous la colère nationale, le pays impose les coques doubles : Exxon devient le symbole de l'arrogance industrielle.",
+   "icon": "tanker",
+   "image": "cartes/card_29_exxon.png"
+  },
+  {
+   "id": "azf",
+   "num": 30,
+   "sev": 4,
+   "sevLabel": "CATASTROPHIQUE",
+   "title": "AZF TOULOUSE",
+   "sub": "EXPLOSION INDUSTRIELLE",
+   "company": "Grande Paroisse • 2001",
+   "impact": -30,
+   "description": "Le 21 septembre 2001, 300 tonnes de nitrate d'ammonium explosent à l'usine AZF de Toulouse : 31 morts, des milliers de blessés, des quartiers entiers dévastés, 2,3 milliards d'euros de dégâts. Procès de dix ans, aucune condamnation définitive, une douleur collective durable : la catastrophe transforme la réglementation des sites industriels en France.",
+   "icon": "explosion",
+   "image": "cartes/card_30_azf.png"
+  }
+ ],
+ "roles": [
+  {
+   "id": "pdg",
+   "num": 1,
+   "title": "PDG",
+   "image": "cartes/roles/role_01_pdg.png"
+  },
+  {
+   "id": "communicant",
+   "num": 2,
+   "title": "DIRECTEUR DE LA COM.",
+   "image": "cartes/roles/role_02_communicant.png"
+  },
+  {
+   "id": "journalistes",
+   "num": 3,
+   "title": "JOURNALISTES",
+   "image": "cartes/roles/role_03_journalistes.png"
+  },
+  {
+   "id": "politique",
+   "num": 4,
+   "title": "POLITIQUE",
+   "image": "cartes/roles/role_04_politique.png"
+  },
+  {
+   "id": "clients",
+   "num": 5,
+   "title": "CLIENTS",
+   "image": "cartes/roles/role_05_clients.png"
+  },
+  {
+   "id": "salaries",
+   "num": 6,
+   "title": "SALARIÉS",
+   "image": "cartes/roles/role_06_salaries.png"
+  },
+  {
+   "id": "rh",
+   "num": 7,
+   "title": "RH",
+   "image": "cartes/roles/role_07_rh.png"
+  },
+  {
+   "id": "ops",
+   "num": 8,
+   "title": "RESPONSABLE DES OPS",
+   "image": "cartes/roles/role_08_ops.png"
+  }
+ ],
+ "traps": [
+  {
+   "id": "enquete",
+   "num": 1,
+   "title": "COMPLÉMENT D'ENQUÊTE",
+   "rule": "Enlève automatiquement 15 points à l'équipe adverse si l'entreprise gère parfaitement sa communication.",
+   "effect": {
+    "type": "penalty_if_perfect",
+    "points": -15
+   },
+   "image": "cartes/pieges/piege_01_enquete.png"
+  },
+  {
+   "id": "jensen",
+   "num": 2,
+   "title": "JENSEN HUANG",
+   "rule": "Interdit au PDG de l'entreprise de communiquer pendant 1 tour.",
+   "effect": {
+    "type": "block_ceo",
+    "turns": 1
+   },
+   "image": "cartes/pieges/piege_02_jensen.png"
+  },
+  {
+   "id": "bhl",
+   "num": 3,
+   "title": "BERNARD HENRI LÉVY",
+   "rule": "Permet d'annuler un tour si l'entreprise prend l'eau.",
+   "effect": {
+    "type": "cancel_turn"
+   },
+   "image": "cartes/pieges/piege_03_bhl.png"
+  },
+  {
+   "id": "epstein",
+   "num": 4,
+   "title": "EPSTEIN FILES",
+   "rule": "Permet de censurer une réponse directement après qu'elle a été donnée : elle ne compte plus dans l'argumentaire.",
+   "effect": {
+    "type": "censure"
+   },
+   "image": "cartes/pieges/piege_04_epstein.png"
+  },
+  {
+   "id": "covid",
+   "num": 5,
+   "title": "COVID",
+   "rule": "Permet à l'arbitre d'annuler des dettes sans explication et de rajouter 15 points à une entreprise.",
+   "effect": {
+    "type": "arbiter_debt_cancel",
+    "points": 15
+   },
+   "image": "cartes/pieges/piege_05_covid.png"
+  }
+ ]
+}

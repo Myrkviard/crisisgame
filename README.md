@@ -19,6 +19,10 @@ cartes/
     piege_01_enquete.png … piege_05_covid.png ← les 5 cartes piège (300 dpi)
 ```
 
+## Application web (jouer en ligne)
+
+Voir [app/README.md](app/README.md) — jeu multijoueur : QR code, 1 Maître du Jeu + 2 équipes de 4, cartes crises/rôles/pièges, minuteur 2 min, écran projection. Le paquet de cartes (`deck/crisisgame.deck.json`) est chargé depuis ce dépôt à chaque partie.
+
 ## Impression
 
 1. **Papier** : A4 250-300 g/m² (papier photo brillant pour un rendu premium).
