@@ -72,12 +72,14 @@ export default function Gallery() {
   }, [slide, deck]);
 
   const drawCrisis = (history: string[]): GalleryCrisis | null => {
-    if (!deck || deck.crisis.length === 0) return null;
-    const recent = history.slice(-14);
-    const pool = deck.crisis.filter((c) => !recent.includes(c.id));
-    const candidates = pool.length ? pool : deck.crisis;
-    return candidates[Math.floor(Math.random() * candidates.length)];
+    if (!deck) return null;
+    const pool = deck.crisis.filter((c) => !history.includes(c.id));
+    if (pool.length === 0) return null;
+    return pool[Math.floor(Math.random() * pool.length)];
   };
+
+  const deckTotal = deck ? deck.crisis.length : 0;
+  const deckLeft = deck ? Math.max(0, deckTotal - drawnHistory.length) : 0;
 
   const openCard = (id: string) => {
     if (!deck) return;
@@ -142,11 +144,17 @@ export default function Gallery() {
             const c = drawCrisis(drawnHistory);
             if (c) {
               setDrawn(c);
-              setDrawnHistory((h) => [...h, c.id].slice(-60));
+              setDrawnHistory((h) => [...h, c.id]);
             }
           }}
         >
           🎲 Tirer une carte crise au hasard
+        </button>
+      )}
+
+      {deck && tab === 'crisis' && deckLeft === 0 && (
+        <button className="gallery-zoom-close draw-reset" onClick={() => setDrawnHistory([])}>
+          ♻️ Nouveau tirage (remettre tout le paquet)
         </button>
       )}
 
@@ -228,9 +236,9 @@ export default function Gallery() {
       {drawn && deck && (() => {
         const thumbs = drawnHistory.slice(-8).map((id) => deck.crisis.find((c) => c.id === id)).filter(Boolean) as GalleryCrisis[];
         return (
-          <div className="slide-overlay">
+          <div className="slide-overlay draw-overlay">
             <div className="slide-top">
-              <span className="slide-counter">Tirage n°{drawnHistory.length}</span>
+              <span className="slide-counter">Tirage n°{drawnHistory.length} / {deckTotal}</span>
               <button className="gallery-zoom-close" onClick={() => setDrawn(null)}>✕ Fermer</button>
             </div>
             <div className="slide-stage">
@@ -242,7 +250,7 @@ export default function Gallery() {
               <span className={`sev sev-${drawn.sev}`}>{drawn.sevLabel}</span>
               <b>{drawn.title} — {drawn.sub}</b>
               <span className="draw-impact">{drawn.impact} points de Réputation</span>
-              <span className="slide-hint">Aucune carte ne peut ressortir avant 15 tirages · {drawnHistory.length} tirage(s) dans le paquet courant</span>
+              <span className="slide-hint">Les cartes déjà tirées ne reviennent pas · {deckLeft} carte(s) restante(s)</span>
               {thumbs.length > 0 && (
                 <div className="draw-thumbs">
                   {thumbs.map((t, i) => (
@@ -256,23 +264,27 @@ export default function Gallery() {
                 </div>
               )}
               <div className="draw-actions">
-                <button
-                  className="primary"
-                  onClick={() => {
-                    const c = drawCrisis(drawnHistory);
-                    if (c) {
-                      setDrawn(c);
-                      setDrawnHistory((h) => [...h, c.id].slice(-60));
-                    }
-                  }}
-                >
-                  🎲 Retirer une autre
-                </button>
+                {deckLeft > 0 ? (
+                  <button
+                    className="primary"
+                    onClick={() => {
+                      const c = drawCrisis(drawnHistory);
+                      if (c) {
+                        setDrawn(c);
+                        setDrawnHistory((h) => [...h, c.id]);
+                      }
+                    }}
+                  >
+                    🎲 Retirer une autre
+                  </button>
+                ) : (
+                  <span className="draw-empty-note">Paquet épuisé : remets tout le paquet pour retirer à nouveau 👇</span>
+                )}
                 <button
                   className="gallery-zoom-close"
                   onClick={() => { setDrawnHistory([]); setDrawn(null); }}
                 >
-                  Nouveau tirage (remettre tout le paquet)
+                  ♻️ Nouveau tirage (remettre tout le paquet)
                 </button>
               </div>
             </div>
