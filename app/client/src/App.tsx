@@ -74,7 +74,7 @@ function DemoGate({ auth, setAuth }: { auth: Auth | null; setAuth: (a: Auth | nu
     (async () => {
       for (let i = 0; i < 6 && !cancelled; i++) {
         try {
-          const res = await api<{ code: string; mjToken: string; deckSource: string }>('/demo');
+          const res = await api<{ code: string; mjToken: string; deckSource: string }>('/demo', {});
           if (cancelled) return;
           setAuth({ code: res.code, token: res.mjToken, kind: 'mj', name: 'Démo', demo: true });
           return;
