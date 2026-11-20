@@ -669,3 +669,19 @@ button.solo-btn:hover { border-color: var(--text); }
   .draw-split { flex-direction: column; overflow-y: auto; }
   .draw-score { width: min(340px, 92vw); border-left: none; padding: 0; max-height: none; }
 }
+
+.sb-traps { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.sb-trap {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 200, 96, 0.45);
+  background: rgba(246, 200, 96, 0.10);
+  color: #f0e6d2;
+  cursor: pointer;
+  transition: opacity 0.25s, filter 0.25s, background 0.2s;
+}
+.sb-trap:hover { background: rgba(246, 200, 96, 0.24); }
+.sb-trap.used { opacity: 0.15; filter: grayscale(1); }
+.sb-compact .sb-trap { font-size: 0.7rem; padding: 4px 7px; }
