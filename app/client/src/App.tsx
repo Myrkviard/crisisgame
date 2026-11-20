@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { loadAuth, saveAuth, type Auth } from './api';
+import { api, loadAuth, saveAuth, type Auth } from './api';
 import Home from './screens/Home';
 import Join from './screens/Join';
 import MjDashboard from './screens/MjDashboard';
@@ -12,10 +12,12 @@ interface Route {
   code: string | null;
   projection: boolean;
   gallery?: boolean;
+  demo?: boolean;
 }
 
 function parsePath(): Route {
   if (window.location.pathname === '/cartes') return { code: null, projection: false, gallery: true };
+  if (window.location.pathname === '/demo') return { code: null, projection: false, gallery: false, demo: true };
   const m = window.location.pathname.match(/^\/partie\/([A-Za-z0-9]{3,10})(\/projection)?/);
   if (!m) return { code: null, projection: false, gallery: false };
   return { code: m[1].toUpperCase(), projection: m[2] === '/projection', gallery: false };
@@ -48,6 +50,8 @@ export default function App() {
 
   if (route.gallery) return <Gallery />;
 
+  if (route.demo) return <DemoGate auth={auth} setAuth={setAuthAndSave} />;
+
   if (auth && auth.code) {
     if (auth.kind === 'mj') return <MjDashboard auth={auth} onLogout={() => setAuthAndSave(null)} />;
     if (auth.kind === 'solo') return <SoloRoom auth={auth} onLogout={() => setAuthAndSave(null)} />;
@@ -57,4 +61,24 @@ export default function App() {
   if (route.code) return <Join code={route.code} onJoined={setAuthAndSave} />;
 
   return <Home onCreated={setAuthAndSave} />;
+}
+
+function DemoGate({ auth, setAuth }: { auth: Auth | null; setAuth: (a: Auth | null) => void }) {
+  useEffect(() => {
+    if (auth?.demo) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await api<{ code: string; mjToken: string; deckSource: string }>('/demo');
+        if (cancelled) return;
+        setAuth({ code: res.code, token: res.mjToken, kind: 'mj', name: 'Démo', demo: true });
+      } catch {
+        if (!cancelled) window.location.href = '/';
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [auth?.demo, setAuth]);
+
+  if (auth?.demo) return <MjDashboard auth={auth} onLogout={() => { setAuth(null); window.location.href = '/'; }} />;
+  return <div className="screen center"><p>Préparation de la démo…</p></div>;
 }

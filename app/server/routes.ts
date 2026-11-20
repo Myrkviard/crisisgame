@@ -1,9 +1,9 @@
 import { Router, json } from 'express';
 import type { Request, Response } from 'express';
-import { addPlayer, findPlayer, isMJ, newRoom, type Room } from './rooms.js';
+import { addLog, addPlayer, findPlayer, isMJ, newRoom, type Room } from './rooms.js';
 import type { PublicState, PrivateState, TeamId } from '../shared/view.js';
 import {
-  addPointsToPlayerTeam, adjustScore, ATTACK_ROLE_IDS, drawRole, endSpeech, forceSpeaker,
+  addPointsToPlayerTeam, adjustScore, ATTACK_ROLE_IDS, demoStep, drawRole, endSpeech, forceSpeaker,
   GameError, pauseTimer, pickCrisis, playTrap, requirePlayer, requireRoom,
   restartTimer, resumeTimer, selfEvaluate, skipConcert, startGame, nextRound, beginRound,
 } from './engine.js';
@@ -84,6 +84,7 @@ function publicState(room: Room): PublicState {
       }),
     speakIndex: room.solo ? 0 : room.speakIndex,
     solo: room.solo,
+    demo: room.demo,
     soloRole: (() => {
       if (!room.solo || room.status !== 'SPEAK') return null;
       const role = room.deck.roles.find((r) => r.id === room.castRole);
@@ -145,6 +146,27 @@ api.post('/rooms', async (req, res) => {
       return;
     }
     const room = newRoom(deck, source, name);
+    res.json({ code: room.code, mjToken: room.mjToken, deckSource: source });
+  } catch (err) {
+    fail(res, err);
+  }
+});
+
+const DEMO_TEAMS: [string[], string[]] = [
+  ['Léa', 'Karim', 'Emma', 'Noah'],
+  ['Inès', 'Louis', 'Maya', 'Théo'],
+];
+
+api.post('/demo', async (_req, res) => {
+  try {
+    const { deck, source } = await loadDeck();
+    const room = newRoom(deck, source, 'Démo', false, true);
+    DEMO_TEAMS.forEach((names, i) => {
+      const team = i === 0 ? 'A' : 'B';
+      for (const n of names) addPlayer(room, n, team);
+    });
+    startGame(room);
+    addLog(room, '👁️ Démo • partie fictive avec 8 joueurs virtuels — avancez étape par étape pour voir le déroulé');
     res.json({ code: room.code, mjToken: room.mjToken, deckSource: source });
   } catch (err) {
     fail(res, err);
@@ -312,6 +334,10 @@ api.post('/rooms/:code/mj', (req, res) => {
       case 'return-to-pick': room.status = 'PICK'; room.deadline = null; beginRound(room); break;
       case 'next-round': nextRound(room); break;
       case 'next-speaker': endSpeech(room); break;
+      case 'demo-step':
+        if (!room.demo) throw new GameError('Réservé au mode démo');
+        demoStep(room);
+        break;
       case 'force-speaker': forceSpeaker(room, String(req.body?.playerId)); break;
       case 'end': room.status = 'ENDED'; room.deadline = null; break;
       case 'adjust': adjustScore(room, teamOf(req), Number(req.body?.delta ?? 0)); break;

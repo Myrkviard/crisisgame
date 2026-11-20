@@ -355,6 +355,37 @@ function applyTrapEffect(room: Room, team: TeamId, trap: TrapCard): void {
   }
 }
 
+/* ------------------------------------------------------------- démo */
+
+export function demoStep(room: Room): void {
+  switch (room.status) {
+    case 'LOBBY':
+      startGame(room);
+      break;
+    case 'PICK': {
+      const p = teamPlayers(room, currentTeam(room))[0];
+      if (!p) throw new GameError('Aucun joueur dans l\'équipe en jeu');
+      pickCrisis(room, p, rnd(Math.max(1, room.crisisChoices.length)));
+      break;
+    }
+    case 'REVEAL':
+      room.status = 'CONCERT';
+      room.deadline = Date.now() + CONCERT_MS;
+      addLog(room, 'Temps de concertation lancé : 2 minutes');
+      addLog(room, '💡 Les cartes piège sont jouables à tout moment !');
+      saveRoom(room);
+      break;
+    case 'CONCERT':
+      concertationDone(room);
+      break;
+    case 'SPEAK':
+      endSpeech(room);
+      break;
+    default:
+      throw new GameError('La démo est terminée • relancez une nouvelle démo');
+  }
+}
+
 /* ------------------------------------------------------------- MJ tools */
 
 export function forceSpeaker(room: Room, playerId: string): void {

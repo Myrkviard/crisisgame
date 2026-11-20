@@ -11,6 +11,7 @@ export interface Auth {
   kind: 'mj' | 'player' | 'solo';
   name: string;
   mjToken?: string;
+  demo?: boolean;
 }
 
 export function loadAuth(): Auth | null {

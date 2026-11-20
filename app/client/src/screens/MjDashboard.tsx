@@ -34,6 +34,15 @@ export default function MjDashboard({ auth, onLogout }: { auth: Auth; onLogout: 
 
   return (
     <div className="screen dashboard">
+      {s.demo && (
+        <div className="demo-bar">
+          <span>👁️ <b>MODE DÉMO</b> — partie fictive avec 8 joueurs virtuels</span>
+          <div className="demo-actions">
+            <button className="primary" onClick={() => mj('demo-step')}>Étape suivante →</button>
+            <a className="ghost demo-quit" href="/">Menu principal</a>
+          </div>
+        </div>
+      )}
       <header className="bar">
         <span className="brand">⚠ CRISES D'ENTREPRISE</span>
         <span className="code-chip">PARTIE {s.code}</span>

@@ -76,6 +76,12 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
             {busySolo ? 'Préparation…' : 'Jouer tout seul'}
           </button>
         </section>
+
+        <section className="panel mode-card">
+          <h2>👁️ Démo</h2>
+          <p className="mode-desc">Une partie fictive à 8 joueurs virtuels, étape par étape, pour voir à quoi ça ressemble.</p>
+          <a className="demo-btn" href="/demo">Voir une partie en action</a>
+        </section>
       </div>
 
       {error && <p className="error center">{error}</p>}

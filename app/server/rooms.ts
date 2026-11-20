@@ -32,6 +32,7 @@ export interface Room {
   createdAt: number;
   status: Phase;
   solo: boolean;
+  demo: boolean;
   castRole: string | null;
   lastRoleSpoken: string | null;
   mjToken: string;
@@ -79,13 +80,14 @@ export function logEntry(msg: string): LogEntry {
   return { t: Date.now(), msg };
 }
 
-export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: string, solo = false): Room {
+export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: string, solo = false, demo = false): Room {
   const code = genCode();
   const room: Room = {
     code,
     createdAt: Date.now(),
     status: 'LOBBY',
     solo,
+    demo,
     castRole: null,
     lastRoleSpoken: null,
     mjToken: genToken(),
