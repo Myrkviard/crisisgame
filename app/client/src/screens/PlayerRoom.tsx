@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { api, useRoomState, type AnyState, type Auth } from '../api';
 import type { PrivateState, PublicState } from '../../../shared/view';
 import Timer from '../components/Timer';
+import GonePanel from '../components/GonePanel';
 
 type PState = PublicState & Partial<PrivateState>;
 
@@ -27,7 +28,10 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
     }
   };
 
-  if (!state) return <div className="screen center"><p>Chargement… {error ?? ''}</p></div>;
+  if (!state) {
+    if (/introuvable/i.test(error ?? '')) return <GonePanel onLogout={onLogout} />;
+    return <div className="screen center"><p>Chargement… {error ?? ''}</p></div>;
+  }
   const s = state as PState;
   const you = s.you;
 

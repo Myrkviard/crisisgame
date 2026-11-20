@@ -178,8 +178,23 @@ export function isMJ(room: Room, token: string): boolean {
 
 function persist(): void {
   fs.mkdirSync(DATA_DIR, { recursive: true });
-  const data = [...rooms.values()].map(({ deck, ...rest }) => ({ ...rest, deckVersion: deck.version }));
+  const data = [...rooms.values()];
   fs.writeFileSync(DATA_FILE, JSON.stringify(data));
+}
+
+function loadPersisted(): void {
+  try {
+    if (!fs.existsSync(DATA_FILE)) return;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')) as unknown;
+    if (!Array.isArray(data)) return;
+    for (const r of data as Room[]) {
+      if (!r?.code || !Array.isArray(r?.deck?.crisis)) continue;
+      if (!rooms.has(r.code.toUpperCase())) rooms.set(r.code.toUpperCase(), r);
+    }
+    console.log(`[rooms] ${rooms.size} partie(s) restaurée(s) depuis rooms.json`);
+  } catch (err) {
+    console.warn('[rooms] échec du chargement des parties persistées', err);
+  }
 }
 
 export function shuffle<T>(arr: T[]): T[] {
@@ -190,3 +205,5 @@ export function shuffle<T>(arr: T[]): T[] {
   }
   return out;
 }
+
+loadPersisted();

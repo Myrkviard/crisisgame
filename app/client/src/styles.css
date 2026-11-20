@@ -352,3 +352,26 @@ button.solo-btn:hover { border-color: var(--text); }
 }
 .gallery-bottom-home:hover { background: linear-gradient(180deg, #3a3a46, #22222c); }
 .gallery-screen { padding-bottom: 30px; }
+
+.gone-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  max-width: 520px;
+}
+
+.gone-panel h2 {
+  font-size: 1.8rem;
+  color: var(--gold, #f6c860);
+}
+
+.gone-home {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+}

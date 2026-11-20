@@ -131,8 +131,9 @@ export function currentTeam(room: Room): TeamId {
 export function pickCrisis(room: Room, player: Player, index: number): CrisisCard {
   if (room.status !== 'PICK') throw new GameError('Choix de crise non ouvert');
   if (player.team !== currentTeam(room)) throw new GameError("Ce n'est pas le tour de votre équipe");
-  if (index < 0 || index >= room.crisisChoices.length) throw new GameError('Choix invalide');
+  if (!Number.isInteger(index) || index < 0 || index >= room.crisisChoices.length) throw new GameError('Choix invalide');
   const crisisId = room.crisisChoices[index];
+  if (!crisisId) throw new GameError('Choix invalide');
   room.crisisChoices = [];
   room.crisisDeck = room.crisisDeck.filter((id) => id !== crisisId);
   room.currentCrisisId = crisisId;

@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import { useRoomState } from '../api';
 import Timer from '../components/Timer';
+import GonePanel from '../components/GonePanel';
 
 export default function Projection({ code }: { code: string; mode?: string }) {
-  const { state } = useRoomState(code, null)
+  const { state, error } = useRoomState(code, null);
   useEffect(() => {
     document.title = `Projection — Partie ${code}`;
   }, [code]);
 
-  if (!state) return <div className="screen center projection"><p>Connexion à la partie {code}…</p></div>;
+  if (!state) {
+    if (/introuvable/i.test(error ?? '')) return <GonePanel />;
+    return <div className="screen center projection"><p>Connexion à la partie {code}…</p></div>;
+  }
   const s = state;
 
   return (
