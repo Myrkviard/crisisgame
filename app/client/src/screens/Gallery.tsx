@@ -247,10 +247,6 @@ export default function Gallery() {
                 : <div className="slide-empty">Illustration indisponible</div>}
             </div>
             <div className="slide-caption">
-              <span className={`sev sev-${drawn.sev}`}>{drawn.sevLabel}</span>
-              <b>{drawn.title} — {drawn.sub}</b>
-              <span className="draw-impact">{drawn.impact} points de Réputation</span>
-              <span className="slide-hint">Les cartes déjà tirées ne reviennent pas · {deckLeft} carte(s) restante(s)</span>
               {thumbs.length > 0 && (
                 <div className="draw-thumbs">
                   {thumbs.map((t, i) => (
