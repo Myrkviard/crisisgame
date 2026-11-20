@@ -48,6 +48,8 @@ export default function Gallery() {
   const [zoomCrisis, setZoomCrisis] = useState<GalleryCrisis | null>(null);
   const [zoomImage, setZoomImage] = useState<string | null>(null);
   const [slide, setSlide] = useState<number | null>(null);
+  const [drawn, setDrawn] = useState<GalleryCrisis | null>(null);
+  const [drawnHistory, setDrawnHistory] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -68,6 +70,14 @@ export default function Gallery() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [slide, deck]);
+
+  const drawCrisis = (history: string[]): GalleryCrisis | null => {
+    if (!deck || deck.crisis.length === 0) return null;
+    const recent = history.slice(-14);
+    const pool = deck.crisis.filter((c) => !recent.includes(c.id));
+    const candidates = pool.length ? pool : deck.crisis;
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  };
 
   const openCard = (id: string) => {
     if (!deck) return;
@@ -122,6 +132,21 @@ export default function Gallery() {
           onClick={() => { setSlide(0); setZoomCrisis(null); setZoomImage(null); }}
         >
           🖥️ Voir les 30 crises une par une (grand écran)
+        </button>
+      )}
+
+      {deck && tab === 'crisis' && (
+        <button
+          className="primary slide-open draw-open"
+          onClick={() => {
+            const c = drawCrisis(drawnHistory);
+            if (c) {
+              setDrawn(c);
+              setDrawnHistory((h) => [...h, c.id].slice(-60));
+            }
+          }}
+        >
+          🎲 Tirer une carte crise au hasard
         </button>
       )}
 
@@ -199,6 +224,61 @@ export default function Gallery() {
           </div>
         </div>
       )}
+
+      {drawn && deck && (() => {
+        const thumbs = drawnHistory.slice(-8).map((id) => deck.crisis.find((c) => c.id === id)).filter(Boolean) as GalleryCrisis[];
+        return (
+          <div className="slide-overlay">
+            <div className="slide-top">
+              <span className="slide-counter">Tirage n°{drawnHistory.length}</span>
+              <button className="gallery-zoom-close" onClick={() => setDrawn(null)}>✕ Fermer</button>
+            </div>
+            <div className="slide-stage">
+              {drawn.image
+                ? <img className="slide-img" src={drawn.image} alt={`${drawn.title} — ${drawn.sub}`} />
+                : <div className="slide-empty">Illustration indisponible</div>}
+            </div>
+            <div className="slide-caption">
+              <span className={`sev sev-${drawn.sev}`}>{drawn.sevLabel}</span>
+              <b>{drawn.title} — {drawn.sub}</b>
+              <span className="draw-impact">{drawn.impact} points de Réputation</span>
+              <span className="slide-hint">Aucune carte ne peut ressortir avant 15 tirages · {drawnHistory.length} tirage(s) dans le paquet courant</span>
+              {thumbs.length > 0 && (
+                <div className="draw-thumbs">
+                  {thumbs.map((t, i) => (
+                    <img
+                      key={`${t.id}-${i}`}
+                      className={`draw-thumb${i === thumbs.length - 1 ? ' draw-now' : ''}`}
+                      src={t.image ?? ''}
+                      alt={t.title}
+                    />
+                  ))}
+                </div>
+              )}
+              <div className="draw-actions">
+                <button
+                  className="primary"
+                  onClick={() => {
+                    const c = drawCrisis(drawnHistory);
+                    if (c) {
+                      setDrawn(c);
+                      setDrawnHistory((h) => [...h, c.id].slice(-60));
+                    }
+                  }}
+                >
+                  🎲 Retirer une autre
+                </button>
+                <button
+                  className="gallery-zoom-close"
+                  onClick={() => { setDrawnHistory([]); setDrawn(null); }}
+                >
+                  Nouveau tirage (remettre tout le paquet)
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {slide !== null && deck && (() => {
         const n = deck.crisis.length;

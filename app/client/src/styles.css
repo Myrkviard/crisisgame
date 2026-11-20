@@ -634,3 +634,13 @@ button.solo-btn:hover { border-color: var(--text); }
 @media (max-width: 700px) {
   .gallery-nav-links { flex-direction: column; }
 }
+
+.draw-open { margin-bottom: 10px; }
+.draw-impact { font-size: 1.15rem; font-weight: 700; color: #ffd76a; }
+.draw-thumbs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+.draw-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; opacity: 0.55; border: 2px solid transparent; }
+.draw-now { border-color: #ffd76a; opacity: 1; }
+.draw-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+@media (max-width: 700px) {
+  .draw-thumb { width: 44px; height: 44px; }
+}
