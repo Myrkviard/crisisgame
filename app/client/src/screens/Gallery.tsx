@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { ScoreboardPanel } from './Scoreboard';
+import RolesPanel from './RolesPanel';
 
 interface GalleryCrisis {
   id: string;
@@ -291,6 +292,9 @@ export default function Gallery() {
               <aside className="draw-score">
                 <h2 className="draw-score-title">TABLEAU DES POINTS</h2>
                 <ScoreboardPanel compact />
+              </aside>
+              <aside className="draw-score draw-roles">
+                <RolesPanel compact />
               </aside>
             </div>
           </div>

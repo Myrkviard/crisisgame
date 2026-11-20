@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import RolesPanel from './RolesPanel';
 
 const STORE_KEY = 'cg_scoreboard';
 
@@ -132,7 +133,10 @@ export default function Scoreboard() {
         </div>
       </div>
 
-      <ScoreboardPanel />
+      <div className="sb-page-grid">
+        <ScoreboardPanel />
+        <RolesPanel />
+      </div>
     </div>
   );
 }
