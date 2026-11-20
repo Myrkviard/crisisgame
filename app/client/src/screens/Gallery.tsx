@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { ScoreboardPanel } from './Scoreboard';
 
 interface GalleryCrisis {
   id: string;
@@ -241,12 +242,14 @@ export default function Gallery() {
               <span className="slide-counter">Tirage n°{drawnHistory.length} / {deckTotal}</span>
               <button className="gallery-zoom-close" onClick={() => setDrawn(null)}>✕ Fermer</button>
             </div>
-            <div className="slide-stage">
-              {drawn.image
-                ? <img className="slide-img" src={drawn.image} alt={`${drawn.title} — ${drawn.sub}`} />
-                : <div className="slide-empty">Illustration indisponible</div>}
-            </div>
-            <div className="slide-caption">
+            <div className="draw-split">
+              <div className="draw-left">
+                <div className="slide-stage">
+                  {drawn.image
+                    ? <img className="slide-img" src={drawn.image} alt={`${drawn.title} — ${drawn.sub}`} />
+                    : <div className="slide-empty">Illustration indisponible</div>}
+                </div>
+                <div className="slide-caption">
               {thumbs.length > 0 && (
                 <div className="draw-thumbs">
                   {thumbs.map((t, i) => (
@@ -282,7 +285,13 @@ export default function Gallery() {
                 >
                   ♻️ Nouveau tirage (remettre tout le paquet)
                 </button>
+                </div>
               </div>
+              </div>
+              <aside className="draw-score">
+                <h2 className="draw-score-title">TABLEAU DES POINTS</h2>
+                <ScoreboardPanel compact />
+              </aside>
             </div>
           </div>
         );

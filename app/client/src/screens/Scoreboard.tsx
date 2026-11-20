@@ -10,12 +10,11 @@ interface TeamState {
 const DOWN = [-1, -5, -10, -15, -20, -30] as const;
 const UP = [1, 5, 10, 15, 20] as const;
 
-export default function Scoreboard() {
+export function ScoreboardPanel({ compact = false }: { compact?: boolean }) {
   const [a, setA] = useState<TeamState>({ name: 'Équipe A', score: 100 });
   const [b, setB] = useState<TeamState>({ name: 'Équipe B', score: 100 });
 
   useEffect(() => {
-    document.title = 'Tableau des points — Crises d\'Entreprise';
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY) ?? 'null') as { a?: TeamState; b?: TeamState } | null;
       if (saved?.a && typeof saved.a.score === 'number') setA(saved.a);
@@ -66,6 +65,20 @@ export default function Scoreboard() {
   );
 
   return (
+    <div className={compact ? 'sb-compact' : 'sb-grid'}>
+      {teamPanel(a, setA, 'A')}
+      {teamPanel(b, setB, 'B')}
+      <button className="ghost sb-reset" onClick={reset}>🔄 Réinitialiser les deux équipes (100 / 100)</button>
+    </div>
+  );
+}
+
+export default function Scoreboard() {
+  useEffect(() => {
+    document.title = 'Tableau des points — Crises d\'Entreprise';
+  }, []);
+
+  return (
     <div className="screen gallery-screen">
       <div className="gallery-head">
         <div>
@@ -81,12 +94,7 @@ export default function Scoreboard() {
         </div>
       </div>
 
-      <div className="sb-grid">
-        {teamPanel(a, setA, 'A')}
-        {teamPanel(b, setB, 'B')}
-      </div>
-
-      <button className="ghost sb-reset" onClick={reset}>🔄 Réinitialiser les deux équipes (100 / 100)</button>
+      <ScoreboardPanel />
     </div>
   );
 }
