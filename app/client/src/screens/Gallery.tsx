@@ -47,6 +47,7 @@ export default function Gallery() {
   const [tab, setTab] = useState<Tab>('crisis');
   const [zoomCrisis, setZoomCrisis] = useState<GalleryCrisis | null>(null);
   const [zoomImage, setZoomImage] = useState<string | null>(null);
+  const [slide, setSlide] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,6 +56,18 @@ export default function Gallery() {
       .then(setDeck)
       .catch((e) => setError((e as Error).message));
   }, []);
+
+  useEffect(() => {
+    if (slide === null || !deck) return;
+    const n = deck.crisis.length;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') setSlide((s) => (s === null ? s : (s + 1) % n));
+      else if (e.key === 'ArrowLeft') setSlide((s) => (s === null ? s : (s - 1 + n) % n));
+      else if (e.key === 'Escape') setSlide(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [slide, deck]);
 
   const openCard = (id: string) => {
     if (!deck) return;
@@ -101,6 +114,15 @@ export default function Gallery() {
       {!deck && !error && <p className="gallery-loading">Chargement du paquet de cartes…</p>}
 
       {deck && tab === 'crisis' && (
+        <button
+          className="primary slide-open"
+          onClick={() => { setSlide(0); setZoomCrisis(null); setZoomImage(null); }}
+        >
+          🖥️ Voir les 30 crises une par une (grand écran)
+        </button>
+      )}
+
+      {deck && tab === 'crisis' && (
         <div className="gallery-grid">
           {deck.crisis.map((c) => (
             <button key={c.id} className="gallery-card" onClick={() => openCard(c.id)}>
@@ -143,6 +165,18 @@ export default function Gallery() {
           <div className="gallery-zoom-inner" onClick={(e) => e.stopPropagation()}>
             <button className="gallery-zoom-close" onClick={() => { setZoomCrisis(null); setZoomImage(null); }}>✕ Fermer</button>
             {zoomCrisis && (
+              <button
+                className="primary slide-open"
+                onClick={() => {
+                  const i = deck.crisis.findIndex((c) => c.id === zoomCrisis.id);
+                  setZoomCrisis(null);
+                  setSlide(i === -1 ? 0 : i);
+                }}
+              >
+                🖥️ Plein écran — une par une
+              </button>
+            )}
+            {zoomCrisis && (
               <div className="zoom-crisis">
                 <div className="zoom-crisis-cols">
                   {zoomCrisis.image && <img src={zoomCrisis.image} alt={`${zoomCrisis.title} — ${zoomCrisis.sub}`} />}
@@ -162,6 +196,32 @@ export default function Gallery() {
           </div>
         </div>
       )}
+
+      {slide !== null && deck && (() => {
+        const n = deck.crisis.length;
+        const c = deck.crisis[slide];
+        if (!c) return null;
+        return (
+          <div className="slide-overlay" onClick={() => setSlide(null)}>
+            <div className="slide-top" onClick={(e) => e.stopPropagation()}>
+              <span className="slide-counter">{slide + 1} / {n}</span>
+              <button className="gallery-zoom-close" onClick={() => setSlide(null)}>✕ Fermer</button>
+            </div>
+            <div className="slide-stage" onClick={(e) => e.stopPropagation()}>
+              <button className="slide-arrow" onClick={() => setSlide((s) => (s === null ? s : (s - 1 + n) % n))} aria-label="Précédente">‹</button>
+              {c.image
+                ? <img className="slide-img" src={c.image} alt={`${c.title} — ${c.sub}`} />
+                : <div className="slide-empty">Illustration indisponible</div>}
+              <button className="slide-arrow" onClick={() => setSlide((s) => (s === null ? s : (s + 1) % n))} aria-label="Suivante">›</button>
+            </div>
+            <div className="slide-caption" onClick={(e) => e.stopPropagation()}>
+              <span className={`sev sev-${c.sev}`}>{c.sevLabel}</span>
+              <b>{c.title} — {c.sub}</b>
+              <span className="slide-hint">flèches ← → du clavier, ou tapez sur les bords de l'écran</span>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
