@@ -21,8 +21,18 @@ app.use('/api', api);
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Route API introuvable' }));
 
 if (CLIENT_DIST) {
-  app.use(express.static(CLIENT_DIST));
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/assets/')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else {
+      res.setHeader('Cache-Control', 'no-store');
+    }
+    next();
+  });
+  app.use('/assets', express.static(path.join(CLIENT_DIST, 'assets')));
+  app.use(express.static(CLIENT_DIST, { etag: true, lastModified: true }));
   app.get('*', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
     res.sendFile(path.join(CLIENT_DIST, 'index.html'));
   });
 }
