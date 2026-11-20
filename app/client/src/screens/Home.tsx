@@ -84,9 +84,9 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
         <h2>Comment jouer ?</h2>
         <ol className="howto-steps">
           <li><b>Créez la partie</b> et projetez le QR code à l'écran (ou le lien de projection).</li>
-          <li><b>Chacun pioche son rôle secret</b> : PDG, communicant, journalistes, RH…</li>
-          <li><b>À chaque tour</b>, une équipe tire une carte crise face cachée : révélation, chrono de 2 minutes, puis l'ordinateur désigne qui prend la parole.</li>
-          <li><b>Les adversaires jugent</b> la conférence de presse : convaincante, la perte est divisée par deux — sinon, points perdus. Les pièges ? Pendant les concertations.</li>
+          <li><b>À chaque tour, chacun reçoit un rôle secret</b> : l'équipe qui tire la crise défend (PDG, communicant, RH, ops), l'autre attaque (politique, journalistes, clients, salariés).</li>
+          <li><b>À chaque tour</b>, une équipe tire une carte crise face cachée : révélation, chrono de 2 minutes, puis l'ordinateur enchaîne les tours de parole : un attaquant, puis un défenseur, etc., jusqu'à ce que tout le monde ait joué.</li>
+          <li><b>Les adversaires jugent</b> la conférence de presse : convaincante, la perte est divisée par deux — sinon, points perdus. Les cartes piège ? Jouables à tout moment.</li>
         </ol>
       </section>
 

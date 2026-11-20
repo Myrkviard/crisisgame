@@ -45,7 +45,7 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
 
       {flash && <div className="flash">{flash}</div>}
       {s.status === 'CONCERT' && s.status && (
-        <div className="concert-banner">🎵 Temps de concertation — cartes piège jouables !</div>
+        <div className="concert-banner">🎵 Temps de concertation — les cartes piège sont jouables à tout moment !</div>
       )}
 
       {!you?.role && s.status === 'ROLES' && (
@@ -67,10 +67,11 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
 
       {you?.role && (
         <section className="panel center-panel role-card">
-          <h2>Votre rôle secret</h2>
+          <h2>Votre rôle secret — {you.roleSide === 'attaque' ? '⚔️ Attaque' : '🛡️ Défense'}</h2>
           {you.role.image
             ? <img className="card-img card-img-role" src={you.role.image} alt={you.role.title} />
             : <p className="speaker-role">{you.role.title}</p>}
+          <p className="muted">Les rôles sont redistribués à chaque tour : attaque ou défense selon l'équipe qui tire la crise.</p>
         </section>
       )}
 
@@ -90,7 +91,7 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
               </div>
             </>
           ) : (
-            <p className="muted">L'équipe <b>{s.teamToPlay}</b> choisit… Vous pouvez jouer un piège si la concertation démarre.</p>
+            <p className="muted">L'équipe <b>{s.teamToPlay}</b> tire la crise et défend. Vous pouvez jouer un piège à tout moment.</p>
           )}
         </section>
       )}
@@ -117,7 +118,7 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
 
       {s.status === 'SPEAK' && s.speaker && (
         <section className="panel speak-banner">
-          <h2>À la tribune</h2>
+          <h2>À la tribune ({s.speakIndex + 1}/{s.speakOrder.length})</h2>
           <p className="speaker-role">{s.speaker.roleTitle}</p>
           <p className="speaker-name">{s.speaker.name}</p>
         </section>
@@ -134,10 +135,9 @@ export default function PlayerRoom({ auth, onLogout }: { auth: Auth; onLogout: (
               <p>{t.rule}</p>
               <button
                 className="danger"
-                disabled={s.status !== 'CONCERT'}
                 onClick={() => act('play-trap', { trapId: t.id }, `Piège lancé : ${t.title} !`)}
               >
-                {s.status === 'CONCERT' ? '🎯 Lancer le piège' : 'Jouable pendant la concertation'}
+                🎯 Lancer le piège
               </button>
             </div>
           ))}

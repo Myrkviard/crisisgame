@@ -32,6 +32,9 @@ export interface PublicState {
   drawIndex: number;
   nowDrawingName: string | null;
   speaker: { name: string; roleTitle: string } | null;
+  defenseTeam: TeamId;
+  speakOrder: { name: string; team: TeamId; roleTitle: string; side: 'attaque' | 'défense' }[];
+  speakIndex: number;
   canceledTeam: TeamId | null;
   blockedCeo: Record<TeamId, number>;
   log: { t: number; msg: string }[];
@@ -49,6 +52,7 @@ export interface PrivateState extends PublicState {
   you: {
     id: string; name: string; team: TeamId | null; isMJ: boolean;
     role: { id: string; title: string; image: string | null } | null;
+    roleSide: 'attaque' | 'défense' | null;
     hand: HandTrap[];
     canDrawRole: boolean;
     canPick: boolean;

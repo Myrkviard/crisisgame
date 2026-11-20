@@ -375,3 +375,17 @@ button.solo-btn:hover { border-color: var(--text); }
   font-weight: 700;
   font-size: 1.05rem;
 }
+
+.speak-order {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 20px;
+}
+
+.speak-order li.speak-done { opacity: 0.45; text-decoration: line-through; }
+
+.speak-order li.speak-now {
+  color: var(--gold, #f6c860);
+  font-weight: 700;
+}

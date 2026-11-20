@@ -50,6 +50,8 @@ export interface Room {
   pausedRemaining: number | null;
   drawOrder: string[];
   drawIndex: number;
+  speakQueue: string[];
+  speakIndex: number;
   lastSpeakerId: string | null;
   blockedCeo: Record<TeamId, number>;
   cancelTurn: TeamId | null;
@@ -102,6 +104,8 @@ export function newRoom(deck: Deck, deckSource: 'github' | 'fallback', mjName: s
     pausedRemaining: null,
     drawOrder: [],
     drawIndex: 0,
+    speakQueue: [],
+    speakIndex: 0,
     lastSpeakerId: null,
     blockedCeo: { A: 0, B: 0 },
     cancelTurn: null,

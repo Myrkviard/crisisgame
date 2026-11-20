@@ -59,12 +59,13 @@ export function startGame(room: Room): void {
     saveRoom(room);
     return;
   }
-  room.roleDeck = shuffle(room.deck.roles.map((r) => r.id));
-  room.drawOrder = shuffle(room.players.map((p) => p.id));
+  room.roleDeck = [];
+  room.drawOrder = [];
   room.drawIndex = 0;
   room.hands = distributeTraps(room.players, room.deck.traps);
-  room.status = 'ROLES';
-  addLog(room, 'La partie démarre • distribution des rôles tour par tour');
+  room.status = 'PICK';
+  addLog(room, 'La partie démarre • rôles attaque/défense distribués à chaque tour');
+  beginRound(room);
   saveRoom(room);
 }
 
@@ -121,7 +122,43 @@ export function beginRound(room: Room): void {
     addLog(room, `TOUR ${room.round} • à vous de tirer une carte crise`);
     return;
   }
-  addLog(room, `TOUR ${room.round} • l'équipe ${team} choisit une carte crise`);
+  distributeRoundRoles(room, team);
+  room.speakQueue = buildSpeakQueue(room, team);
+  room.speakIndex = 0;
+  room.lastSpeakerId = null;
+  const attackTeam: TeamId = team === 'A' ? 'B' : 'A';
+  addLog(room, `TOUR ${room.round} • l'équipe ${team} tire la crise et DÉFEND (PDG, communicant, RH, ops) • l'équipe ${attackTeam} ATTAQUE (politique, journalistes, clients, salariés)`);
+  addLog(room, 'Ordre de parole : attaquants et défenseurs en alternance, jusqu\'à ce que tout le monde ait joué');
+}
+
+export const ATTACK_ROLE_IDS = ['politique', 'journalistes', 'clients', 'salaries'];
+export const DEFENSE_ROLE_IDS = ['pdg', 'communicant', 'rh', 'ops'];
+
+function distributeRoundRoles(room: Room, defense: TeamId): void {
+  const attack: TeamId = defense === 'A' ? 'B' : 'A';
+  const defRoles = shuffle(DEFENSE_ROLE_IDS);
+  const atkRoles = shuffle(ATTACK_ROLE_IDS);
+  for (const p of room.players) {
+    if (p.team === defense) p.roleId = defRoles.pop() ?? null;
+    else if (p.team === attack) p.roleId = atkRoles.pop() ?? null;
+  }
+}
+
+function buildSpeakQueue(room: Room, defense: TeamId): string[] {
+  const attack: TeamId = defense === 'A' ? 'B' : 'A';
+  const pdgBlocked = room.blockedCeo[defense] > 0;
+  if (pdgBlocked) {
+    room.blockedCeo[defense] -= 1;
+    addLog(room, 'Effet : le PDG de l\'équipe qui défend est interdit de communiquer ce tour');
+  }
+  const attackers = shuffle(teamPlayers(room, attack));
+  const defenders = shuffle(teamPlayers(room, defense).filter((p) => !(pdgBlocked && p.roleId === 'pdg')));
+  const out: string[] = [];
+  for (let i = 0; i < Math.max(attackers.length, defenders.length); i++) {
+    if (attackers[i]) out.push(attackers[i].id);
+    if (defenders[i]) out.push(defenders[i].id);
+  }
+  return out;
 }
 
 export function currentTeam(room: Room): TeamId {
@@ -165,12 +202,46 @@ export function concertationDone(room: Room): void {
     saveRoom(room);
     return;
   }
-  const speaker = chooseSpeaker(room);
-  room.lastSpeakerId = speaker?.id ?? null;
+  const speakerId = room.speakQueue[room.speakIndex];
+  room.lastSpeakerId = speakerId ?? null;
+  room.castRole = null;
   room.status = 'SPEAK';
   room.deadline = null;
+  logSpeaker(room, speakerId, 'Fin de la concertation');
+  saveRoom(room);
+}
+
+function logSpeaker(room: Room, speakerId: string | undefined, prefix: string): void {
+  const speaker = speakerId ? room.players.find((p) => p.id === speakerId) : undefined;
   const role = speaker?.roleId ? room.deck.roles.find((r) => r.id === speaker.roleId) : null;
-  addLog(room, `Fin de la concertation • ${role ? role.title : '—'} (${speaker?.name ?? '—'}) prend la parole`);
+  const side = role ? (ATTACK_ROLE_IDS.includes(role.id) ? 'ATTACK' : 'DÉFENSE') : '';
+  addLog(room, `${prefix} • ${role ? `${role.title} (${side})` : '—'} : ${speaker?.name ?? '—'} prend la parole (${room.speakIndex + 1}/${room.speakQueue.length})`);
+}
+
+export function endSpeech(room: Room): void {
+  if (room.status !== 'SPEAK') throw new GameError('Aucun tour de parole en cours');
+  room.speakIndex += 1;
+  if (room.speakIndex < room.speakQueue.length) {
+    const speakerId = room.speakQueue[room.speakIndex];
+    room.lastSpeakerId = speakerId ?? null;
+    room.castRole = null;
+    logSpeaker(room, speakerId, 'Rôle suivant');
+    saveRoom(room);
+    return;
+  }
+  room.speakQueue = [];
+  room.speakIndex = 0;
+  room.status = 'PICK';
+  room.deadline = null;
+  room.pausedRemaining = null;
+  room.currentCrisisId = null;
+  addLog(room, 'Rôles épuisés • tout le monde a joué');
+  if (!room.crisisDeck.length) {
+    room.status = 'ENDED';
+    addLog(room, `Plus de cartes crise • partie terminée, scores finaux : Équipe A ${room.teamScores.A} / Équipe B ${room.teamScores.B}`);
+  } else {
+    beginRound(room);
+  }
   saveRoom(room);
 }
 
@@ -203,6 +274,10 @@ function pickSoloRole(room: Room): { id: string; title: string } {
 }
 
 export function skipConcert(room: Room): void {
+  if (room.status === 'REVEAL') {
+    room.status = 'CONCERT';
+    room.deadline = Date.now() + CONCERT_MS;
+  }
   if (room.status !== 'CONCERT') throw new GameError('Pas de concertation en cours');
   addLog(room, 'Concertation interrompue • tour de parole immédiat');
   concertationDone(room);
@@ -233,9 +308,6 @@ export function selfEvaluate(room: Room, success: boolean): void {
 }
 
 export function playTrap(room: Room, player: Player, trapId: string): TrapCard {
-  if (room.status !== 'CONCERT') {
-    throw new GameError('Les cartes piège se jouent uniquement pendant les temps de concertation');
-  }
   const hand = room.hands[player.id] ?? [];
   const idx = hand.indexOf(trapId);
   if (idx === -1) throw new GameError("Cette carte piège n'est pas dans votre main");
@@ -261,8 +333,9 @@ function applyTrapEffect(room: Room, team: TeamId, trap: TrapCard): void {
       break;
     }
     case 'block_ceo': {
-      room.blockedCeo[team] += effect.turns;
-      addLog(room, `Effet : PDG de l'équipe ${team} interdit de communiquer pendant ${effect.turns} tour(s)`);
+      const target: TeamId = currentTeam(room);
+      room.blockedCeo[target] += effect.turns;
+      addLog(room, `Effet : PDG de l'équipe ${target} (l'entreprise en crise) interdit de communiquer pendant ${effect.turns} tour(s)`);
       break;
     }
     case 'cancel_turn': {
@@ -285,9 +358,16 @@ function applyTrapEffect(room: Room, team: TeamId, trap: TrapCard): void {
 /* ------------------------------------------------------------- MJ tools */
 
 export function forceSpeaker(room: Room, playerId: string): void {
-  if (room.status !== 'CONCERT') throw new GameError('Forçage possible pendant la concertation');
+  if (room.status !== 'CONCERT' && room.status !== 'SPEAK') {
+    throw new GameError('Faire parler possible pendant la concertation ou la tribune');
+  }
   const p = room.players.find((x) => x.id === playerId);
   if (!p) throw new GameError('Joueur introuvable', 404);
+  const j = room.speakQueue.indexOf(p.id, room.speakIndex);
+  if (j !== -1) {
+    const i = room.speakIndex;
+    [room.speakQueue[i], room.speakQueue[j]] = [room.speakQueue[j], room.speakQueue[i]];
+  }
   room.lastSpeakerId = p.id;
   room.status = 'SPEAK';
   room.deadline = null;

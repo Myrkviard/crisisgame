@@ -86,7 +86,8 @@ export default function MjDashboard({ auth, onLogout }: { auth: Auth; onLogout: 
               )}
               {s.status === 'PICK' && <p>L'équipe <b>{s.teamToPlay}</b> choisit une carte crise face cachée.</p>}
               <div className="mj-timer-btns">
-                <button onClick={() => mj('next-round')} disabled={s.status !== 'SPEAK' && s.status !== 'CONCERT'}>Tour suivant</button>
+                <button onClick={() => mj('next-speaker')} disabled={s.status !== 'SPEAK'}>Rôle suivant →</button>
+                <button onClick={() => mj('next-round')} disabled={s.status !== 'SPEAK' && s.status !== 'CONCERT'}>Passer au tour suivant</button>
                 <button onClick={() => mj('end')} className="ghost">Terminer la partie</button>
               </div>
             </div>
@@ -115,7 +116,7 @@ export default function MjDashboard({ auth, onLogout }: { auth: Auth; onLogout: 
                     <td>{p.hasRole ? '✓ secret' : '—'}</td>
                     <td>{p.handCount}</td>
                     <td>
-                      {s.status === 'CONCERT' && p.team === s.teamToPlay && (
+                      {(s.status === 'CONCERT' || s.status === 'SPEAK') && !s.solo && (
                         <button onClick={() => mj('force-speaker', { playerId: p.id })}>Faire parler</button>
                       )}
                     </td>
@@ -137,9 +138,23 @@ export default function MjDashboard({ auth, onLogout }: { auth: Auth; onLogout: 
 
       {s.status === 'SPEAK' && s.speaker && (
         <section className="panel speak-banner">
-          <h2>À la tribune</h2>
+          <h2>À la tribune ({s.speakIndex + 1}/{s.speakOrder.length})</h2>
           <p className="speaker-role">{s.speaker.roleTitle}</p>
           <p className="speaker-name">{s.speaker.name}</p>
+        </section>
+      )}
+
+      {!s.solo && (s.status === 'CONCERT' || s.status === 'SPEAK') && s.speakOrder.length > 0 && (
+        <section className="panel">
+          <h2>Ordre de cette tour • défense = équipe {s.defenseTeam}</h2>
+          <ol className="speak-order">
+            {s.speakOrder.map((o, i) => (
+              <li key={i} className={i === s.speakIndex && s.status === 'SPEAK' ? 'speak-now' : i < s.speakIndex ? 'speak-done' : ''}>
+                {o.side === 'attaque' ? '⚔️ ' : '🛡️ '}
+                <b>{o.roleTitle}</b> — {o.name} (équipe {o.team})
+              </li>
+            ))}
+          </ol>
         </section>
       )}
 

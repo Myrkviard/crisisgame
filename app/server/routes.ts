@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import { addPlayer, findPlayer, isMJ, newRoom, type Room } from './rooms.js';
 import type { PublicState, PrivateState, TeamId } from '../shared/view.js';
 import {
-  addPointsToPlayerTeam, adjustScore, chooseSpeaker, drawRole, forceSpeaker,
+  addPointsToPlayerTeam, adjustScore, ATTACK_ROLE_IDS, drawRole, endSpeech, forceSpeaker,
   GameError, pauseTimer, pickCrisis, playTrap, requirePlayer, requireRoom,
   restartTimer, resumeTimer, selfEvaluate, skipConcert, startGame, nextRound, beginRound,
 } from './engine.js';
@@ -20,11 +20,15 @@ function fail(res: Response, err: unknown): void {
   res.status(status).json({ error: message });
 }
 
+function roleSide(roleId: string): 'attaque' | 'défense' {
+  return ATTACK_ROLE_IDS.includes(roleId) ? 'attaque' : 'défense';
+}
+
 function publicState(room: Room): PublicState {
   const crisis = room.currentCrisisId
     ? room.deck.crisis.find((c) => c.id === room.currentCrisisId)
     : undefined;
-  const speaker = room.status === 'SPEAK' || room.status === 'CONCERT'
+  const speaker = room.status === 'SPEAK'
     ? room.players.find((p) => p.id === room.lastSpeakerId)
     : undefined;
   const speakerRole = speaker?.roleId
@@ -66,6 +70,19 @@ function publicState(room: Room): PublicState {
     speaker: speaker
       ? { name: speaker.name, roleTitle: speakerRole?.title ?? '—' }
       : null,
+    defenseTeam: room.solo ? 'A' : room.lastTeamRound,
+    speakOrder: (!room.solo ? room.speakQueue : [])
+      .map((id) => {
+        const p = room.players.find((x) => x.id === id);
+        const role = p?.roleId ? room.deck.roles.find((r) => r.id === p.roleId) : null;
+        return {
+          name: p?.name ?? '?',
+          team: p?.team ?? 'A',
+          roleTitle: role?.title ?? '—',
+          side: role ? roleSide(role.id) : 'attaque' as const,
+        };
+      }),
+    speakIndex: room.solo ? 0 : room.speakIndex,
     solo: room.solo,
     soloRole: (() => {
       if (!room.solo || room.status !== 'SPEAK') return null;
@@ -97,6 +114,7 @@ export function stateFor(room: Room, token: string | null): PublicState | Privat
       team: player?.team ?? null,
       isMJ: mj,
       role: role ? { id: role.id, title: role.title, image: imageUrl(role.image) } : null,
+      roleSide: role ? roleSide(role.id) : null,
       hand,
       canDrawRole:
         !!player && room.status === 'ROLES' && !player.roleId
@@ -293,6 +311,7 @@ api.post('/rooms/:code/mj', (req, res) => {
       case 'restart-timer': restartTimer(room); break;
       case 'return-to-pick': room.status = 'PICK'; room.deadline = null; beginRound(room); break;
       case 'next-round': nextRound(room); break;
+      case 'next-speaker': endSpeech(room); break;
       case 'force-speaker': forceSpeaker(room, String(req.body?.playerId)); break;
       case 'end': room.status = 'ENDED'; room.deadline = null; break;
       case 'adjust': adjustScore(room, teamOf(req), Number(req.body?.delta ?? 0)); break;
