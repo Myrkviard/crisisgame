@@ -64,21 +64,41 @@ export default function App() {
 }
 
 function DemoGate({ auth, setAuth }: { auth: Auth | null; setAuth: (a: Auth | null) => void }) {
+  const [attempt, setAttempt] = useState(0);
+  const [err, setErr] = useState<string | null>(null);
+
   useEffect(() => {
     if (auth?.demo) return;
     let cancelled = false;
+    setErr(null);
     (async () => {
-      try {
-        const res = await api<{ code: string; mjToken: string; deckSource: string }>('/demo');
-        if (cancelled) return;
-        setAuth({ code: res.code, token: res.mjToken, kind: 'mj', name: 'Démo', demo: true });
-      } catch {
-        if (!cancelled) window.location.href = '/';
+      for (let i = 0; i < 6 && !cancelled; i++) {
+        try {
+          const res = await api<{ code: string; mjToken: string; deckSource: string }>('/demo');
+          if (cancelled) return;
+          setAuth({ code: res.code, token: res.mjToken, kind: 'mj', name: 'Démo', demo: true });
+          return;
+        } catch {
+          if (cancelled) return;
+          setErr('Le serveur se réveille… quelques secondes ⏳');
+          await new Promise((r) => setTimeout(r, 4000));
+        }
       }
+      if (!cancelled) setErr('Impossible de créer la démo pour le moment.');
     })();
     return () => { cancelled = true; };
-  }, [auth?.demo, setAuth]);
+  }, [auth?.demo, attempt, setAuth]);
 
   if (auth?.demo) return <MjDashboard auth={auth} onLogout={() => { setAuth(null); window.location.href = '/'; }} />;
-  return <div className="screen center"><p>Préparation de la démo…</p></div>;
+  return (
+    <div className="screen center">
+      <p>{err ?? 'Préparation de la démo…'}</p>
+      {err && (
+        <button className="primary" onClick={() => { setErr(null); setAttempt((a) => a + 1); }}>
+          🔄 Réessayer
+        </button>
+      )}
+      <p style={{ marginTop: 16 }}><a href="/" style={{ color: 'inherit' }}>← Menu principal</a></p>
+    </div>
+  );
 }
