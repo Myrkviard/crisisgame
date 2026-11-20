@@ -98,6 +98,7 @@ export default function Home({ onCreated }: { onCreated: (a: Auth) => void }) {
 
       <footer className="home-links">
         <a className="home-link" href="/cartes">👀 Voir toutes les cartes (30 crises, 8 rôles, 5 pièges)</a>
+        <a className="home-link" href="/points">📋 Tableau des points — parties avec cartes physiques</a>
         <a className="home-link" href="/api/img?path=pdf%2FCrises_dEntreprise_30_cartes_A4.pdf">⬇️ PDF d'impression — les 30 cartes + dos (A4, fond perdu)</a>
         <a className="home-link" href="/api/img?path=pdf%2FCrises_dEntreprise_roles_et_pieges_A4.pdf">⬇️ PDF d'impression — rôles et pièges (A4)</a>
         <p className="footer-hint">Le paquet de cartes est chargé en direct depuis le dépôt GitHub.</p>

@@ -6,6 +6,7 @@ import MjDashboard from './screens/MjDashboard';
 import PlayerRoom from './screens/PlayerRoom';
 import Projection from './screens/Projection';
 import Gallery from './screens/Gallery';
+import Scoreboard from './screens/Scoreboard';
 import SoloRoom from './screens/SoloRoom';
 
 interface Route {
@@ -13,11 +14,13 @@ interface Route {
   projection: boolean;
   gallery?: boolean;
   demo?: boolean;
+  points?: boolean;
 }
 
 function parsePath(): Route {
   if (window.location.pathname === '/cartes') return { code: null, projection: false, gallery: true };
   if (window.location.pathname === '/demo') return { code: null, projection: false, gallery: false, demo: true };
+  if (window.location.pathname === '/points') return { code: null, projection: false, gallery: false, points: true };
   const m = window.location.pathname.match(/^\/partie\/([A-Za-z0-9]{3,10})(\/projection)?/);
   if (!m) return { code: null, projection: false, gallery: false };
   return { code: m[1].toUpperCase(), projection: m[2] === '/projection', gallery: false };
@@ -51,6 +54,8 @@ export default function App() {
   if (route.gallery) return <Gallery />;
 
   if (route.demo) return <DemoGate auth={auth} setAuth={setAuthAndSave} />;
+
+  if (route.points) return <Scoreboard />;
 
   if (auth && auth.code) {
     if (auth.kind === 'mj') return <MjDashboard auth={auth} onLogout={() => setAuthAndSave(null)} />;

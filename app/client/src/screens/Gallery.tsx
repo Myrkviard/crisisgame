@@ -95,7 +95,10 @@ export default function Gallery() {
             {deck && <span className="gallery-version"> Paquet v{deck.version.slice(0, 10)}</span>}
           </p>
         </div>
-        <a className="home-back-btn" href="/">🏠 Menu principal</a>
+        <div className="sb-nav gallery-nav-links">
+          <a className="home-back-btn sb-link" href="/points">📋 Tableau des points</a>
+          <a className="home-back-btn" href="/">🏠 Menu principal</a>
+        </div>
       </div>
 
       <div className="gallery-tabs">

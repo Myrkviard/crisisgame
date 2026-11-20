@@ -518,3 +518,119 @@ button.solo-btn:hover { border-color: var(--text); }
   .slide-arrow:first-child { left: 8px; }
   .slide-arrow:last-of-type { right: 8px; }
 }
+
+.sb-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .sb-nav { align-items: stretch; }
+}
+
+.sb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  width: 100%;
+  margin: 6px 0 14px;
+}
+
+@media (max-width: 700px) {
+  .sb-grid { grid-template-columns: 1fr; }
+}
+
+.sb-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 22px 18px;
+  border-top: 4px solid var(--gold, #f6c860);
+}
+
+.sb-b { border-top-color: #4da3ff; }
+
+.sb-name {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  color: #f0e6d2;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.sb-score {
+  font-size: 4.6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gold, #f6c860);
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.55);
+}
+
+.sb-b .sb-score { color: #4da3ff; }
+
+.sb-score.sb-negative {
+  color: #ff5a4e;
+}
+
+.sb-unit {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.sb-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.sb-down {
+  min-width: 54px;
+  padding: 10px 12px;
+  font-weight: 800;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 68, 58, 0.55);
+  background: rgba(232, 68, 58, 0.14);
+  color: #ff8d84;
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+
+.sb-down:hover { background: rgba(232, 68, 58, 0.3); }
+
+.sb-up {
+  min-width: 54px;
+  padding: 10px 12px;
+  font-weight: 800;
+  border-radius: 10px;
+  border: 1px solid rgba(94, 196, 128, 0.5);
+  background: rgba(94, 196, 128, 0.12);
+  color: #7fe3a1;
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+
+.sb-up:hover { background: rgba(94, 196, 128, 0.28); }
+
+.sb-reset {
+  margin: 0 auto;
+  display: block;
+}
+
+.gallery-nav-links {
+  flex-direction: row;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .gallery-nav-links { flex-direction: column; }
+}
