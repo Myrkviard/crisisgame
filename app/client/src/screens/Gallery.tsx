@@ -82,7 +82,7 @@ export default function Gallery() {
             {deck && <span className="gallery-version"> Paquet v{deck.version.slice(0, 10)}</span>}
           </p>
         </div>
-        <a className="button-ghost-link" href="/">← Retour</a>
+        <a className="home-back-btn" href="/">🏠 Menu principal</a>
       </div>
 
       <div className="gallery-tabs">
@@ -132,6 +132,10 @@ export default function Gallery() {
             </button>
           ))}
         </div>
+      )}
+
+      {deck && (
+        <a className="gallery-bottom-home" href="/">🏠 Menu principal</a>
       )}
 
       {(zoomCrisis || zoomImage) && (
